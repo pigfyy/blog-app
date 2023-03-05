@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  span,
+  input,
+  button {
+    font-family: "Inter", sans-serif;
+  }
+}
+
+@layer components {
+  .sidebar-icon {
+    @apply w-12 h-12 bg-neutral-700 grid rounded-3xl place-items-center hover:rounded-2xl hover:bg-primary-400 transition-all;
+  }
+
+  .test {
+    color: #00000062;
+  }
+}
