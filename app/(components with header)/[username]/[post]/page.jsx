@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import style from "./markdown-styles.module.css";
+import Link from "next/link";
 
 const postContent = `# requirements
 
@@ -51,7 +52,11 @@ export default function PostPage() {
               <img src={userPfp} alt="" />
             </div>
             <div>
-              <p className="text-base font-normal">{username}</p>
+              <Link href={`/${username.toLowerCase()}`}>
+                <p className="text-base font-normal hover:underline">
+                  {username}
+                </p>
+              </Link>
               <span className="text-sm text-neutral-500">
                 {dateCreated} (Edit: {dateEdited})
               </span>

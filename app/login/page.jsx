@@ -20,9 +20,10 @@ export default function Login() {
   return (
     <div
       style={{
-        backgroundImage: "url(https://wallpapercave.com/wp/Tr4rsZf.jpg)",
+        backgroundImage:
+          "url(https://firebasestorage.googleapis.com/v0/b/blog-app-5c7f4.appspot.com/o/login-bg.jpg?alt=media&token=ae45c795-c0a8-4f2f-b39c-0b79b66a52ac)",
       }}
-      className="flex h-full justify-center items-center bg-cover bg-center h-screen"
+      className="flex justify-center items-center bg-cover bg-center h-screen"
     >
       <div className="flex flex-col gap-2 bg-neutral-700 p-10 rounded-lg">
         <h1 className="text-2xl font-bold text-white text-center">
