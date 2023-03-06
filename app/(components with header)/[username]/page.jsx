@@ -6,7 +6,7 @@ const data = {
     "https://cdn.discordapp.com/avatars/368167875740958721/36a8b24e792f03e2c0d037c9e1016600.png?size=4096",
   userBio: "(This user has not set a custom bio yet.)",
   postCount: 36,
-  likeCount: 19,
+  likeCount: 1000000000,
 };
 
 export default function Profile(props) {
