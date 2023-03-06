@@ -4,9 +4,9 @@ export default function HeaderLayout({
   children, // will be a page or nested layout
 }) {
   return (
-    <div className="mx-[112px] h-screen flex flex-col">
+    <>
       <Header />
-      {children}
-    </div>
+      <div className="mx-28 h-screen flex flex-col mt-[104px]">{children}</div>
+    </>
   );
 }
