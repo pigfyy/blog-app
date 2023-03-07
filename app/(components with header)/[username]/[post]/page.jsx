@@ -1,6 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import style from "../../markdown-styles.module.css";
 import Link from "next/link";
+import LinkToEdit from "./LinkToEdit";
 
 const postContent = `# requirements
 
@@ -27,6 +28,7 @@ const data = {
     "https://miro.medium.com/v2/resize:fit:720/format:webp/1*-Y9ozbNWSViiCmal1TT32w.jpeg",
   postPreview:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  isAdmin: true,
 };
 
 export default function PostPage() {
@@ -41,6 +43,7 @@ export default function PostPage() {
     postPreview,
     postImg,
     postContent,
+    isAdmin,
   } = data;
 
   return (
@@ -66,17 +69,20 @@ export default function PostPage() {
               </span>
             </div>
           </div>
-          <div className="flex gap-1">
-            <button className="my-auto">
-              <img
-                src="https://firebasestorage.googleapis.com/v0/b/blog-app-5c7f4.appspot.com/o/icons%2Fheart.svg?alt=media&token=be5997e0-241e-4a64-8a33-f40cf90e89bc"
-                alt=""
-                className="w-6"
-              />
-            </button>
-            <span className="text-neutral-500 my-auto leading-4 text-xl font-medium">
-              {hearts}
-            </span>
+          <div className="flex items-center gap-3">
+            <LinkToEdit />
+            <div className="flex gap-1">
+              <button className="my-auto">
+                <img
+                  src="https://firebasestorage.googleapis.com/v0/b/blog-app-5c7f4.appspot.com/o/icons%2Fheart.svg?alt=media&token=be5997e0-241e-4a64-8a33-f40cf90e89bc"
+                  alt=""
+                  className="w-6"
+                />
+              </button>
+              <span className="text-neutral-500 my-auto leading-4 text-xl font-medium">
+                {hearts}
+              </span>
+            </div>
           </div>
         </div>
         <h1 className="text-3xl font-bold mt-8">{postTitle}</h1>
