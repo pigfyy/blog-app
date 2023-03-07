@@ -1,5 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import style from "./markdown-styles.module.css";
+import style from "../../markdown-styles.module.css";
 import Link from "next/link";
 
 const postContent = `# requirements
