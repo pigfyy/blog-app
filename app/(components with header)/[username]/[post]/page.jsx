@@ -45,7 +45,7 @@ export default function PostPage() {
 
   return (
     <div className="flex justify-center">
-      <div className="max-w-[900px] mt-4 mb-10">
+      <div className="max-w-[900px] mt-4">
         <div className="flex justify-between">
           <div className="flex gap-4">
             <div className="w-12 h-12 rounded-full overflow-hidden">
