@@ -1,38 +1,48 @@
+"use client";
+
 import Link from "next/link";
 import kebabCase from "lodash.kebabcase";
 
-const { isSignedIn, userPfp, username } = {
-  isSignedIn: true,
-  userPfp:
-    "https://cdn.discordapp.com/avatars/368167875740958721/36a8b24e792f03e2c0d037c9e1016600.png?size=4096",
-  username: "Pigfy",
-};
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/lib/firebase";
+import { logout } from "@/lib/auth";
 
 export default function Header() {
+  const [user] = useAuthState(auth);
+  const isSignedIn = user ? true : false;
+  const userPfp = user?.photoURL;
+  const username = user?.displayName;
+
   return (
-    <div className="flex w-full py-4 justify-between items-center fixed top-0 px-28 bg-white shadow-md">
+    <div className="fixed top-0 flex w-full items-center justify-between bg-white py-4 px-28 shadow-md">
       <Link href="/">
-        <div className="flex gap-2 select-none">
-          <div className="w-10 h-10">
+        <div className="flex select-none gap-2">
+          <div className="h-10 w-10">
             <img src="/favicon.ico" alt="" />
           </div>
-          <span className="text-[#374151] text-[20px] font-bold leading-[21px]">
+          <span className="text-[20px] font-bold leading-[21px] text-[#374151]">
             Modern
             <br />
             Blog App
           </span>
         </div>
       </Link>
-      <div className="flex gap-3 items-center">
+      <div className="flex items-center gap-3">
         {isSignedIn && (
           <>
+            <button
+              className="rounded-lg border-[1px] border-red-600 px-6 py-3 text-base font-medium text-black hover:shadow-md"
+              onClick={() => logout()}
+            >
+              Log Out
+            </button>
             <Link href="/new">
-              <button className="font-medium text-base text-black border-blue-600 border-[1px] rounded-lg px-6 py-3 hover:shadow-md">
+              <button className="rounded-lg border-[1px] border-blue-600 px-6 py-3 text-base font-medium text-black hover:shadow-md">
                 Write Post
               </button>
             </Link>
             <Link href={`/${kebabCase(username)}`}>
-              <button className="w-10 h-10 rounded-full overflow-hidden">
+              <button className="h-10 w-10 overflow-hidden rounded-full">
                 <img src={userPfp} alt="" />
               </button>
             </Link>
@@ -40,7 +50,7 @@ export default function Header() {
         )}
         {!isSignedIn && (
           <Link href="/login">
-            <button className="font-medium text-base text-white bg-blue-600 rounded-lg px-6 py-3 hover:brightness-90">
+            <button className="rounded-lg bg-blue-600 px-6 py-3 text-base font-medium text-white hover:brightness-90">
               Sign In
             </button>
           </Link>

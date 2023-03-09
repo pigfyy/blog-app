@@ -1,4 +1,5 @@
 import PostFeed from "@/components/PostFeed";
+import LinkToEdit from "@/components/LinkToEdit";
 
 const data = {
   username: "Pigfy",
@@ -14,12 +15,15 @@ export default function Profile(props) {
 
   return (
     <div>
-      <div className="flex gap-12 justify-center mb-5">
+      <div className="mb-5 flex justify-center gap-12">
         <div className="">
-          <img src={userPfp} alt="" className="rounded-full max-w-[150px]" />
+          <img src={userPfp} alt="" className="max-w-[150px] rounded-full" />
         </div>
-        <div className="flex flex-col gap-3 max-w-[900px]">
-          <h1 className="text-3xl">{username}</h1>
+        <div className="flex max-w-[900px] flex-col gap-3">
+          <div className="flex justify-between">
+            <h1 className="text-3xl">{username}</h1>
+            <LinkToEdit />
+          </div>
           <div className="flex items-center gap-5">
             <span>
               <span className="font-bold">{postCount}</span> posts

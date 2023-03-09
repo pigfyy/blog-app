@@ -29,26 +29,26 @@ function Edit() {
       <input
         type="text"
         placeholder="New post title here..."
-        className="font-extrabold text-5xl outline-none"
+        className="text-5xl font-extrabold outline-none"
       />
       <textarea
         name="description"
         cols="30"
         rows="1"
         placeholder="New post description here..."
-        className="resize-none mt-5 outline-none text-xl font-medium"
+        className="mt-5 resize-none text-xl font-medium outline-none"
       ></textarea>
       <div>
-        <button className="border-blue-600 border-[1px] rounded-lg px-3 py-2 hover:shadow-md flex gap-2">
+        <button className="flex gap-2 rounded-lg border-[1px] border-blue-600 px-3 py-2 hover:shadow-md">
           {!coverImg ? (
             <>
-              <img src="https://firebasestorage.googleapis.com/v0/b/blog-app-5c7f4.appspot.com/o/icons%2Fimage.svg?alt=media&token=522c4ef4-d702-4e18-bb7f-28d0d6a42a7e" />
+              <img src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fimage.svg?alt=media&token=9c73154c-ed90-4380-a14f-275ad2e399c5" />
               Add Cover Image
             </>
           ) : (
             <>
               <img
-                src="https://firebasestorage.googleapis.com/v0/b/blog-app-5c7f4.appspot.com/o/icons%2Fedit.svg?alt=media&token=30d49885-0b50-4cd9-987d-87e5c97e74bf"
+                src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fedit.svg?alt=media&token=6d372210-3e2a-43ad-8b7e-76f9a10547f8"
                 alt=""
               />
               Edit Cover Image
@@ -61,19 +61,19 @@ function Edit() {
           </div>
         )}
       </div>
-      <div className="border-neutral-400 w-full border-solid border-[1px] mt-5 mb-[2px] rounded-lg flex">
-        <button className="flex gap-2 rounded-lg border-r-[1px] px-3 py-2 border-neutral-400 hover:bg-gray-200">
-          <img src="https://firebasestorage.googleapis.com/v0/b/blog-app-5c7f4.appspot.com/o/icons%2Fimage.svg?alt=media&token=522c4ef4-d702-4e18-bb7f-28d0d6a42a7e" />
+      <div className="mt-5 mb-[2px] flex w-full rounded-lg border-[1px] border-solid border-neutral-400">
+        <button className="flex gap-2 rounded-lg border-r-[1px] border-neutral-400 px-3 py-2 hover:bg-gray-200">
+          <img src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fimage.svg?alt=media&token=9c73154c-ed90-4380-a14f-275ad2e399c5" />
           Upload Image
         </button>
-        <button className="px-3 py-2 rounded-lg border-neutral-400 border-x-[1px] hover:bg-gray-200">
+        <button className="rounded-lg border-x-[1px] border-neutral-400 px-3 py-2 hover:bg-gray-200">
           <img
-            src="https://firebasestorage.googleapis.com/v0/b/blog-app-5c7f4.appspot.com/o/icons%2Fcopy.svg?alt=media&token=45cac71e-8eb8-4e48-bc54-480ca8da6477"
+            src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fcopy.svg?alt=media&token=c5904ef5-d83e-45e4-8495-1eb1e2355a76"
             alt=""
           />
         </button>
         <p
-          className={`px-3 py-2 rounded-lg border-neutral-400 border-l-[1px] overflow-x-auto ${
+          className={`overflow-x-auto rounded-lg border-l-[1px] border-neutral-400 px-3 py-2 ${
             newImgLink ? "text-black" : "text-neutral-500"
           }`}
         >
@@ -87,7 +87,7 @@ function Edit() {
         rows="15"
         cols="30"
         placeholder="Write your post content here..."
-        className="resize-none outline-none border-neutral-400 border-solid border-[1px] rounded-lg p-3"
+        className="resize-none rounded-lg border-[1px] border-solid border-neutral-400 p-3 outline-none"
       ></textarea>
     </>
   );
@@ -104,8 +104,8 @@ export default function EditPost() {
 
   return (
     <div className="flex justify-center">
-      <div className="max-w-[900px] w-full">
-        <div className="flex justify-between w-full">
+      <div className="w-full max-w-[900px]">
+        <div className="flex w-full justify-between">
           <span className="font-bold underline">
             {pathname === "/new" ? "Create Post" : "Edit Post"}
           </span>
@@ -118,14 +118,14 @@ export default function EditPost() {
             </button>
           </div>
         </div>
-        <div className="shadow-2xl px-10 py-10 rounded-lg mt-3 flex flex-col">
+        <div className="mt-3 flex flex-col rounded-lg px-10 py-10 shadow-2xl">
           {isEdit ? <Edit /> : <Preview />}
         </div>
-        <div className="flex gap-2 mt-5">
-          <button className="font-medium text-base text-white bg-blue-600 rounded-lg px-6 py-3 hover:brightness-90">
+        <div className="mt-5 flex gap-2">
+          <button className="rounded-lg bg-blue-600 px-6 py-3 text-base font-medium text-white hover:brightness-90">
             Publish
           </button>
-          <button className="text-blue-600 font-medium text-base rounded-lg px-6 py-3 hover:bg-blue-200 hover:text-blue-900">
+          <button className="rounded-lg px-6 py-3 text-base font-medium text-blue-600 hover:bg-blue-200 hover:text-blue-900">
             Save draft
           </button>
         </div>

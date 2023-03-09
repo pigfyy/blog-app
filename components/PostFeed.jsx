@@ -4,7 +4,7 @@ import crypto from "crypto";
 export default function PostFeed(props) {
   const posts = [
     {
-      img: "https://firebasestorage.googleapis.com/v0/b/blog-app-5c7f4.appspot.com/o/example%20article%20img.png?alt=media&token=13e9a4f6-6b86-4d23-9225-79d9f2e4abef",
+      img: "https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/example%20article%20img.png?alt=media&token=5785cfb5-0b97-40f8-9d18-d9c20af86282",
       author: "Franklin Zhang",
       title: "Very attractive title",
       preview:
@@ -12,7 +12,7 @@ export default function PostFeed(props) {
       hearts: "10",
     },
     {
-      img: "https://firebasestorage.googleapis.com/v0/b/blog-app-5c7f4.appspot.com/o/example%20article%20img.png?alt=media&token=13e9a4f6-6b86-4d23-9225-79d9f2e4abef",
+      img: "https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/example%20article%20img.png?alt=media&token=5785cfb5-0b97-40f8-9d18-d9c20af86282",
       author: "Franklin Zhang",
       title: "Very attractive title",
       preview:
@@ -41,10 +41,10 @@ export default function PostFeed(props) {
   return (
     <div className="flex flex-col">
       <div className="mb-7 mt-2 h-[1px] bg-neutral-400"></div>
-      <div className="grid gap-12 grid-cols-4 mx-auto max-[1874px]:grid-cols-3 max-[1444px]:grid-cols-2 max-[1024px]:grid-cols-1">
+      <div className="mx-auto grid grid-cols-4 gap-12 max-[1874px]:grid-cols-3 max-[1444px]:grid-cols-2 max-[1024px]:grid-cols-1">
         {createFeed()}
       </div>
-      <button className="mt-5 mb-3 mx-auto font-medium text-base text-black border-blue-600 border-[1px] rounded-lg px-6 py-3 hover:shadow-md">
+      <button className="mx-auto mt-5 mb-3 rounded-lg border-[1px] border-blue-600 px-6 py-3 text-base font-medium text-black hover:shadow-md">
         Load More
       </button>
     </div>

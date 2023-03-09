@@ -1,7 +1,7 @@
 import ReactMarkdown from "react-markdown";
-import style from "../../markdown-styles.module.css";
+import style from "@/components/markdown-styles.module.css";
 import Link from "next/link";
-import LinkToEdit from "./LinkToEdit";
+import LinkToEdit from "@/components/LinkToEdit";
 
 const postContent = `# requirements
 
@@ -48,10 +48,10 @@ export default function PostPage() {
 
   return (
     <div className="flex justify-center">
-      <div className="max-w-[900px] mt-4">
+      <div className="mt-4 max-w-[900px]">
         <div className="flex justify-between">
           <div className="flex gap-4">
-            <div className="w-12 h-12 rounded-full overflow-hidden">
+            <div className="h-12 w-12 overflow-hidden rounded-full">
               <img src={userPfp} alt="" />
             </div>
             <div>
@@ -70,24 +70,24 @@ export default function PostPage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <LinkToEdit />
+            {isAdmin && <LinkToEdit />}
             <div className="flex gap-1">
               <button className="my-auto">
                 <img
-                  src="https://firebasestorage.googleapis.com/v0/b/blog-app-5c7f4.appspot.com/o/icons%2Fheart.svg?alt=media&token=be5997e0-241e-4a64-8a33-f40cf90e89bc"
+                  src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fheart.svg?alt=media&token=e41bf294-f439-41f5-b654-72aaa16422e2"
                   alt=""
                   className="w-6"
                 />
               </button>
-              <span className="text-neutral-500 my-auto leading-4 text-xl font-medium">
+              <span className="my-auto text-xl font-medium leading-4 text-neutral-500">
                 {hearts}
               </span>
             </div>
           </div>
         </div>
-        <h1 className="text-3xl font-bold mt-8">{postTitle}</h1>
-        <p className="text-neutral-600 text-lg mt-3">{postPreview}</p>
-        <div className="mt-5 w-full mb-5">
+        <h1 className="mt-8 text-3xl font-bold">{postTitle}</h1>
+        <p className="mt-3 text-lg text-neutral-600">{postPreview}</p>
+        <div className="mt-5 mb-5 w-full">
           <img src={postImg} alt="" className="w-full" />
         </div>
         <ReactMarkdown className={style.markdown}>{postContent}</ReactMarkdown>

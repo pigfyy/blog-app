@@ -1,4 +1,4 @@
-import EditPost from "@/app/(components with header)/EditPost";
+import EditPost from "@/components/EditPost";
 
 export default function EditPostPage() {
   return <EditPost />;
