@@ -4,7 +4,10 @@ import ReactMarkdown from "react-markdown";
 import style from "./markdown-styles.module.css";
 import { usePathname } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
+import { useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const { isEdit, coverImg, newImgLink } = {
   isEdit: true,
@@ -34,9 +37,31 @@ function Form() {
     formState: { errors },
   } = useForm();
 
-  console.warn(errors);
+  const coverImgInput = useRef(null);
+  const postImgInput = useRef(null);
+
+  if (Object.keys(errors).length > 0) {
+    console.warn(errors);
+  }
 
   const onSubmit = (data) => console.log(data);
+
+  const uploadFile = (e) => {
+    const file = e.target.files[0];
+    const storage = getStorage();
+    const coverImgRef = ref(storage, "cover-images/");
+
+    uploadBytes(coverImgRef, file).then((snapshot) => {
+      console.log("Uploaded a blob or file!");
+      getDownloadURL(coverImgRef)
+        .then((downloadURL) => {
+          console.log(downloadURL);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -60,7 +85,7 @@ function Form() {
             cols="30"
             rows="1"
             placeholder="New post description here..."
-            className="mt-5 mb-5 resize-none text-xl font-medium outline-none"
+            className="mt-5 mb-3 resize-none text-xl font-medium outline-none"
             maxLength={125}
             {...register("description", {
               required: true,
@@ -70,9 +95,17 @@ function Form() {
           ></textarea>
           {/* Cover Image */}
           <div>
+            <input
+              type="file"
+              className="hidden"
+              ref={coverImgInput}
+              onChange={uploadFile}
+              accept="image/x-png,image/gif,image/jpeg"
+            />
             <button
               type="button"
               className="flex gap-2 rounded-lg border-[1px] border-blue-600 px-3 py-2 hover:shadow-md"
+              onClick={() => coverImgInput.current.click()}
             >
               {!coverImg ? (
                 <>
