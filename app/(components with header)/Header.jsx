@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import kebabCase from "lodash.kebabcase";
 
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -43,7 +44,7 @@ export default function Header() {
             </Link>
             <Link href={`/${kebabCase(username)}`}>
               <button className="h-10 w-10 overflow-hidden rounded-full">
-                <img src={userPfp} alt="" />
+                <img src={userPfp} alt="" referrerPolicy="no-referrer" />
               </button>
             </Link>
           </>
