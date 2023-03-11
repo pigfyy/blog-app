@@ -15,7 +15,7 @@ export default function Header() {
   const username = user?.displayName;
 
   return (
-    <div className="fixed top-0 flex w-full items-center justify-between bg-white py-4 px-28 shadow-md">
+    <div className="fixed top-0 z-50 flex w-full items-center justify-between bg-white py-4 px-28 shadow-md">
       <Link href="/">
         <div className="flex select-none gap-2">
           <div className="h-10 w-10">

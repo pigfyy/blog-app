@@ -6,7 +6,7 @@ export default function HeaderLayout({
   return (
     <>
       <Header />
-      <div className="mx-28 min-h-screen flex flex-col pt-32 pb-10">
+      <div className="mx-28 flex min-h-screen flex-col pt-32 pb-10">
         {children}
       </div>
     </>

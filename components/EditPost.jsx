@@ -4,10 +4,9 @@ import ReactMarkdown from "react-markdown";
 import style from "./markdown-styles.module.css";
 import { usePathname } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
-import { useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { uploadImage } from "@/lib/storage";
+import { useAppStore } from "@/lib/store";
 
 const { isEdit, coverImg, newImgLink } = {
   isEdit: true,
@@ -29,6 +28,14 @@ const postContent = `# requirements
 `;
 
 function Form() {
+  if (process.browser) {
+    window.onbeforeunload = () => {
+      return "Are you sure you want to leave this page?";
+    };
+  }
+
+  const { coverImg, setCoverImg } = useAppStore((state) => state.editPostPage);
+
   const {
     register,
     handleSubmit,
@@ -37,30 +44,18 @@ function Form() {
     formState: { errors },
   } = useForm();
 
-  const coverImgInput = useRef(null);
-  const postImgInput = useRef(null);
-
   if (Object.keys(errors).length > 0) {
     console.warn(errors);
   }
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    console.log(data);
+  };
 
-  const uploadFile = (e) => {
+  const uploadFile = async (e) => {
     const file = e.target.files[0];
-    const storage = getStorage();
-    const coverImgRef = ref(storage, "cover-images/");
-
-    uploadBytes(coverImgRef, file).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-      getDownloadURL(coverImgRef)
-        .then((downloadURL) => {
-          console.log(downloadURL);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    });
+    const url = await uploadImage(file);
+    setCoverImg(url);
   };
 
   return (
@@ -94,40 +89,52 @@ function Form() {
             })}
           ></textarea>
           {/* Cover Image */}
-          <div>
-            <input
-              type="file"
-              className="hidden"
-              ref={coverImgInput}
-              onChange={uploadFile}
-              accept="image/x-png,image/gif,image/jpeg"
-            />
-            <button
-              type="button"
-              className="flex gap-2 rounded-lg border-[1px] border-blue-600 px-3 py-2 hover:shadow-md"
-              onClick={() => coverImgInput.current.click()}
-            >
-              {!coverImg ? (
-                <>
-                  <img src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fimage.svg?alt=media&token=9c73154c-ed90-4380-a14f-275ad2e399c5" />
-                  Add Cover Image
-                </>
-              ) : (
-                <>
-                  <img
-                    src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fedit.svg?alt=media&token=6d372210-3e2a-43ad-8b7e-76f9a10547f8"
-                    alt=""
+          <div className="flex">
+            <div className="relative">
+              <button
+                type="button"
+                className="flex gap-2 rounded-lg border-[1px] border-blue-600 px-3 py-2 hover:shadow-md"
+                onClick={() => console.log(coverImgInput.current)}
+              >
+                {!coverImg ? (
+                  <>
+                    <img src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fimage.svg?alt=media&token=9c73154c-ed90-4380-a14f-275ad2e399c5" />
+                    Add Cover Image
+                  </>
+                ) : (
+                  <>
+                    <img
+                      src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fedit.svg?alt=media&token=6d372210-3e2a-43ad-8b7e-76f9a10547f8"
+                      alt=""
+                    />
+                    Edit Cover Image
+                  </>
+                )}
+              </button>
+              <Controller
+                name="coverImg"
+                control={control}
+                defaultValue=""
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <input
+                    type="file"
+                    className="absolute top-0 left-0 h-full w-full max-w-full cursor-pointer overflow-hidden bg-blue-600 pl-32 text-blue-100 opacity-0"
+                    onChange={(e) => {
+                      uploadFile(e);
+                      field.onChange(e.target.files[0]);
+                    }}
+                    accept="image/x-png,image/gif,image/jpeg"
                   />
-                  Edit Cover Image
-                </>
-              )}
-            </button>
-            {coverImg && (
-              <div className="mt-5">
-                <img src={coverImg} alt="" className="w-full" />
-              </div>
-            )}
+                )}
+              />
+            </div>
           </div>
+          {coverImg && (
+            <div className="mt-5">
+              <img src={coverImg} alt="" className="w-full" />
+            </div>
+          )}
           {/* Image Upload*/}
           <div className="mt-5 mb-[2px] flex w-full rounded-lg border-[1px] border-solid border-neutral-400">
             <button className="flex gap-2 rounded-lg border-r-[1px] border-neutral-400 px-3 py-2 hover:bg-gray-200">

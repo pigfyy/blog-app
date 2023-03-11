@@ -1,5 +1,5 @@
 import FeedContent from "./FeedContent";
-import crypto from "crypto";
+import { v4 as uuid } from "uuid";
 
 export default function PostFeed(props) {
   const posts = [
@@ -31,7 +31,7 @@ export default function PostFeed(props) {
           title={posts[i].title}
           preview={posts[i].preview}
           hearts={posts[i].hearts}
-          key={crypto.randomUUID()}
+          key={uuid()}
         />
       );
     }
