@@ -5,7 +5,7 @@ import style from "./markdown-styles.module.css";
 import { usePathname } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
-import { uploadImage } from "@/lib/storage";
+import { uploadCoverImg } from "@/lib/storage";
 import { useAppStore } from "@/lib/store";
 import { createPost } from "@/lib/firestore";
 import { auth } from "@/lib/firebase";
@@ -66,10 +66,7 @@ function Form({ pathname }) {
   // handles cover image upload
   const uploadFile = async (e) => {
     const file = e.target.files[0];
-    const url = await uploadImage(
-      file,
-      `users/${auth.currentUser.uid}/coverImgs`
-    );
+    const url = await uploadCoverImg(file);
     setCoverImg(url);
   };
 
@@ -128,12 +125,11 @@ function Form({ pathname }) {
               <Controller
                 name="coverImg"
                 control={control}
-                defaultValue=""
                 rules={{ required: true }}
                 render={({ field }) => (
                   <input
                     type="file"
-                    className="absolute top-0 left-0 h-full w-full max-w-full cursor-pointer overflow-hidden bg-blue-600 pl-32 text-blue-100 opacity-0 "
+                    className="absolute top-0 left-0 h-full w-full max-w-full cursor-pointer overflow-hidden pl-32 text-blue-100 opacity-0"
                     onChange={(e) => {
                       uploadFile(e);
                       field.onChange(e.target.files[0]);
