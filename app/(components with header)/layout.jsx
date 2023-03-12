@@ -1,8 +1,8 @@
+"use client";
+
 import Header from "./Header";
 
-export default function HeaderLayout({
-  children, // will be a page or nested layout
-}) {
+export default function HeaderLayout({ children }) {
   return (
     <>
       <Header />

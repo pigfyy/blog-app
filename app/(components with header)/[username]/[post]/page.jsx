@@ -24,9 +24,9 @@ const data = {
   readTime: "5",
   hearts: "10",
   postContent: postContent,
-  postImg:
+  postCover:
     "https://miro.medium.com/v2/resize:fit:720/format:webp/1*-Y9ozbNWSViiCmal1TT32w.jpeg",
-  postPreview:
+  postDescription:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   isAdmin: true,
 };
@@ -40,8 +40,8 @@ export default function PostPage() {
     readTime,
     hearts,
     postTitle,
-    postPreview,
-    postImg,
+    postDescription,
+    postCover,
     postContent,
     isAdmin,
   } = data;
@@ -86,9 +86,9 @@ export default function PostPage() {
           </div>
         </div>
         <h1 className="mt-8 text-3xl font-bold">{postTitle}</h1>
-        <p className="mt-3 text-lg text-neutral-600">{postPreview}</p>
+        <p className="mt-3 text-lg text-neutral-600">{postDescription}</p>
         <div className="mt-5 mb-5 w-full">
-          <img src={postImg} alt="" className="w-full" />
+          <img src={postCover} alt="" className="w-full" />
         </div>
         <ReactMarkdown className={style.markdown}>{postContent}</ReactMarkdown>
       </div>

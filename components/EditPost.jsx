@@ -7,13 +7,14 @@ import { useForm, Controller } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import { uploadImage } from "@/lib/storage";
 import { useAppStore } from "@/lib/store";
+import { createPost } from "@/lib/firestore";
+import { auth } from "@/lib/firebase";
 
 const { isEdit, coverImg, newImgLink } = {
   isEdit: true,
   coverImg:
     "https://miro.medium.com/v2/resize:fit:720/format:webp/1*-Y9ozbNWSViiCmal1TT32w.jpeg",
-  newImgLink:
-    "https://miro.medium.com/v2/resize:fit:720/format:webp/1*-Y9ozbNWSViiCmal1TT32w.jpeg",
+  newImgLink: "",
 };
 
 const postContent = `# requirements
@@ -27,13 +28,7 @@ const postContent = `# requirements
   - admin page: create posts, and add functionality to other pages if admin (edit post, etc.)
 `;
 
-function Form() {
-  if (process.browser) {
-    window.onbeforeunload = () => {
-      return "Are you sure you want to leave this page?";
-    };
-  }
-
+function Form({ pathname }) {
   const { coverImg, setCoverImg } = useAppStore((state) => state.editPostPage);
 
   const {
@@ -44,17 +39,37 @@ function Form() {
     formState: { errors },
   } = useForm();
 
+  // temporary
   if (Object.keys(errors).length > 0) {
     console.warn(errors);
   }
 
+  // handles form submit
   const onSubmit = (data) => {
-    console.log(data);
+    const postData = {
+      postTitle: data.title,
+      postDescription: data.description,
+      postContent: data.postContent,
+      postCover: coverImg,
+      dateCreated: null,
+      dateEdited: null,
+      authorUsername: null,
+      authorPfp: null,
+      readTime: null,
+      hearts: 0,
+    };
+    if (pathname === "/new") {
+      createPost(postData);
+    }
   };
 
+  // handles cover image upload
   const uploadFile = async (e) => {
     const file = e.target.files[0];
-    const url = await uploadImage(file);
+    const url = await uploadImage(
+      file,
+      `users/${auth.currentUser.uid}/coverImgs`
+    );
     setCoverImg(url);
   };
 
@@ -94,7 +109,6 @@ function Form() {
               <button
                 type="button"
                 className="flex gap-2 rounded-lg border-[1px] border-blue-600 px-3 py-2 hover:shadow-md"
-                onClick={() => console.log(coverImgInput.current)}
               >
                 {!coverImg ? (
                   <>
@@ -119,7 +133,7 @@ function Form() {
                 render={({ field }) => (
                   <input
                     type="file"
-                    className="absolute top-0 left-0 h-full w-full max-w-full cursor-pointer overflow-hidden bg-blue-600 pl-32 text-blue-100 opacity-0"
+                    className="absolute top-0 left-0 h-full w-full max-w-full cursor-pointer overflow-hidden bg-blue-600 pl-32 text-blue-100 opacity-0 "
                     onChange={(e) => {
                       uploadFile(e);
                       field.onChange(e.target.files[0]);
@@ -164,7 +178,7 @@ function Form() {
             cols="30"
             placeholder="Write your post content here..."
             className="resize-none rounded-lg border-[1px] border-solid border-neutral-400 p-3 outline-none"
-            {...register("post", {
+            {...register("postContent", {
               required: true,
               minLength: 1,
             })}
@@ -212,7 +226,7 @@ export default function EditPost() {
             </button>
           </div>
         </div>
-        <Form />
+        <Form pathname={pathname} />
       </div>
     </div>
   );

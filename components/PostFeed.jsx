@@ -1,26 +1,26 @@
 import FeedContent from "./FeedContent";
 import { v4 as uuid } from "uuid";
 
-export default function PostFeed(props) {
-  const posts = [
-    {
-      img: "https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/example%20article%20img.png?alt=media&token=5785cfb5-0b97-40f8-9d18-d9c20af86282",
-      author: "Franklin Zhang",
-      title: "Very attractive title",
-      preview:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      hearts: "10",
-    },
-    {
-      img: "https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/example%20article%20img.png?alt=media&token=5785cfb5-0b97-40f8-9d18-d9c20af86282",
-      author: "Franklin Zhang",
-      title: "Very attractive title",
-      preview:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-      hearts: "10",
-    },
-  ];
+const posts = [
+  {
+    img: "https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/example%20article%20img.png?alt=media&token=5785cfb5-0b97-40f8-9d18-d9c20af86282",
+    author: "Franklin Zhang",
+    title: "Very attractive title",
+    preview:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    hearts: "10",
+  },
+  {
+    img: "https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/example%20article%20img.png?alt=media&token=5785cfb5-0b97-40f8-9d18-d9c20af86282",
+    author: "Franklin Zhang",
+    title: "Very attractive title",
+    preview:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    hearts: "10",
+  },
+];
 
+export default function PostFeed(props) {
   function createFeed() {
     let feed = [];
     for (let i = 0; i < posts.length; i++) {

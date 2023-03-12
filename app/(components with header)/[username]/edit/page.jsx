@@ -5,43 +5,43 @@ const { userPfp } = {
 
 export default function EditUser() {
   return (
-    <div className="flex justify-center my-auto">
-      <div className="flex flex-col gap-5 mb-10">
-        <h1 className="font-bold text-4xl">Edit Profile</h1>
-        <div className="flex gap-10 shadow-2xl rounded-xl p-5">
-          <div className="relative rounded-full overflow-hidden group">
-            <button className="rounded-full overflow-hidden hover:brightness-75">
+    <div className="my-auto flex justify-center">
+      <div className="mb-10 flex flex-col gap-5">
+        <h1 className="text-4xl font-bold">Edit Profile</h1>
+        <div className="flex gap-10 rounded-xl p-5 shadow-2xl">
+          <div className="group relative overflow-hidden rounded-full">
+            <button className="overflow-hidden rounded-full hover:brightness-75">
               <img
                 src={userPfp}
                 alt=""
-                className="rounded-full overflow-hidden"
+                className="h-64 w-64 overflow-hidden rounded-full"
               />
             </button>
-            <div className="absolute text-center top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] text-white font-extrabold select-none group-hover:block hidden group-hover:brightness-[150%]">
+            <div className="absolute top-1/2 left-1/2 hidden translate-x-[-50%] translate-y-[-50%] select-none text-center font-extrabold text-white group-hover:block group-hover:brightness-[150%]">
               Change
               <br />
               Avatar
             </div>
           </div>
           <form className="flex flex-col justify-center">
-            <p className="text-xl font-medium mb-1">Username</p>
+            <p className="mb-1 text-xl font-medium">Username</p>
             <input
               type="text"
-              className="border-[1px] border-neutral-400 rounded-lg p-2 outline-none"
+              className="rounded-lg border-[1px] border-neutral-400 p-2 outline-none"
             />
-            <p className="text-xl font-medium mt-6 mb-1">Bio</p>
+            <p className="mt-6 mb-1 text-xl font-medium">Bio</p>
             <textarea
               cols="30"
               rows="4"
-              className="resize-none border-[1px] border-neutral-400 rounded-lg p-2 outline-none"
+              className="resize-none rounded-lg border-[1px] border-neutral-400 p-2 outline-none"
             ></textarea>
           </form>
         </div>
         <div className="flex gap-3">
-          <button className="font-medium text-base text-white bg-blue-600 rounded-lg px-6 py-3 hover:brightness-90">
+          <button className="rounded-lg bg-blue-600 px-6 py-3 text-base font-medium text-white hover:brightness-90">
             Save
           </button>
-          <button className="font-medium text-base text-black border-blue-600 border-[1px] rounded-lg px-6 py-3 hover:shadow-md">
+          <button className="rounded-lg border-[1px] border-blue-600 px-6 py-3 text-base font-medium text-black hover:shadow-md">
             Revert
           </button>
         </div>
