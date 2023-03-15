@@ -8,7 +8,6 @@ import TextareaAutosize from "react-textarea-autosize";
 import { uploadCoverImg } from "@/lib/storage";
 import { useAppStore } from "@/lib/store";
 import { createPost } from "@/lib/firestore";
-import { auth } from "@/lib/firebase";
 
 const { isEdit, coverImg, newImgLink } = {
   isEdit: true,
