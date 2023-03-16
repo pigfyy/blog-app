@@ -15,21 +15,13 @@ export default async function Profile({ params }) {
   const username = params.username;
   const userId = await getUserIdFromUsername(username);
   const userData = await getUserProfileData(userId);
-  const [userPfp, userBio, postCount, heartCount] = [
-    userData.pfp,
-    userData.bio,
-    userData.postCount,
-    userData.heartCount,
-  ];
-
-  // console.log(await getUserProfileData());
 
   return (
     <div>
       <div className="mb-5 flex justify-center gap-12">
         <div className="">
           <img
-            src={userPfp}
+            src={userData.pfp}
             alt=""
             className="w-[150px] max-w-[150px] rounded-full"
           />
@@ -41,13 +33,13 @@ export default async function Profile({ params }) {
           </div>
           <div className="flex items-center gap-5">
             <span>
-              <span className="font-bold">{postCount}</span> posts
+              <span className="font-bold">{userData.postCount}</span> posts
             </span>
             <span>
-              <span className="font-bold">{heartCount}</span> likes
+              <span className="font-bold">{userData.heartCount}</span> likes
             </span>
           </div>
-          <div>{userBio}</div>
+          <div>{userData.bio}</div>
         </div>
       </div>
 
