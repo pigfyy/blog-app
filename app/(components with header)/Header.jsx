@@ -1,18 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import kebabCase from "lodash.kebabcase";
+import { useState, useEffect } from "react";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase";
 import { logout } from "@/lib/auth";
+import { getUserData } from "@/lib/firestore";
 
 export default function Header() {
   const [user] = useAuthState(auth);
-  const isSignedIn = user ? true : false;
-  const userPfp = user?.photoURL;
-  const username = user?.displayName;
+  const [[userPfp, username], setUser] = useState(["", ""]);
+
+  useEffect(() => {
+    if (user) {
+      getUserData(user.uid).then((data) => {
+        setUser([data.pfp, data.username]);
+      });
+    }
+  }, [user]);
 
   return (
     <div className="fixed top-0 z-50 flex w-full items-center justify-between bg-white py-4 px-28 shadow-md">
@@ -29,7 +36,7 @@ export default function Header() {
         </div>
       </Link>
       <div className="flex items-center gap-3">
-        {isSignedIn && (
+        {user && (
           <>
             <button
               className="rounded-lg border-[1px] border-red-600 px-6 py-3 text-base font-medium text-black hover:shadow-md"
@@ -49,7 +56,7 @@ export default function Header() {
             </Link>
           </>
         )}
-        {!isSignedIn && (
+        {!user && (
           <Link href="/login">
             <button className="rounded-lg bg-blue-600 px-6 py-3 text-base font-medium text-white hover:brightness-90">
               Sign In

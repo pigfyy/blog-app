@@ -1,5 +1,6 @@
 import PostFeed from "@/components/PostFeed";
 import LinkToEdit from "@/components/LinkToEdit";
+import { getUserProfileData, getUserIdFromUsername } from "@/lib/firestore";
 
 const data = {
   username: "Pigfy",
@@ -10,16 +11,30 @@ const data = {
   likeCount: 51,
 };
 
-export default function Profile(props) {
-  const { username, userPfp, userBio, postCount, likeCount } = data;
+export default async function Profile({ params }) {
+  const username = params.username;
+  const userId = await getUserIdFromUsername(username);
+  const userData = await getUserProfileData(userId);
+  const [userPfp, userBio, postCount, heartCount] = [
+    userData.pfp,
+    userData.bio,
+    userData.postCount,
+    userData.heartCount,
+  ];
+
+  // console.log(await getUserProfileData());
 
   return (
     <div>
       <div className="mb-5 flex justify-center gap-12">
         <div className="">
-          <img src={userPfp} alt="" className="max-w-[150px] rounded-full" />
+          <img
+            src={userPfp}
+            alt=""
+            className="w-[150px] max-w-[150px] rounded-full"
+          />
         </div>
-        <div className="flex max-w-[900px] flex-col gap-3">
+        <div className="flex min-w-[300px] max-w-[900px] flex-col gap-3">
           <div className="flex justify-between">
             <h1 className="text-3xl">{username}</h1>
             <LinkToEdit />
@@ -29,10 +44,10 @@ export default function Profile(props) {
               <span className="font-bold">{postCount}</span> posts
             </span>
             <span>
-              <span className="font-bold">{likeCount}</span> likes
+              <span className="font-bold">{heartCount}</span> likes
             </span>
           </div>
-          <div className="">{userBio}</div>
+          <div>{userBio}</div>
         </div>
       </div>
 

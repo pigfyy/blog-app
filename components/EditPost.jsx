@@ -5,30 +5,17 @@ import style from "./markdown-styles.module.css";
 import { usePathname } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
-import { uploadCoverImg } from "@/lib/storage";
+import { uploadCoverImg, uploadPostImg } from "@/lib/storage";
 import { useAppStore } from "@/lib/store";
-import { createPost } from "@/lib/firestore";
+import { createPost, checkSlugExists } from "@/lib/firestore";
+import kebabCase from "lodash.kebabcase";
+import { v4 as uuid } from "uuid";
+import { useState } from "react";
 
-const { isEdit, coverImg, newImgLink } = {
-  isEdit: true,
-  coverImg:
-    "https://miro.medium.com/v2/resize:fit:720/format:webp/1*-Y9ozbNWSViiCmal1TT32w.jpeg",
-  newImgLink: "",
-};
-
-const postContent = `# requirements
-
-## pages:
-
-  - homepage: display recent posts
-  - user profile page: displays their recent posts
-  - post page: displays name, time created, last edited hearts, post content in markdown
-  - login page: login with google
-  - admin page: create posts, and add functionality to other pages if admin (edit post, etc.)
-`;
-
-function Form({ pathname }) {
-  const { coverImg, setCoverImg } = useAppStore((state) => state.editPostPage);
+function Form({ pathname, isEdit }) {
+  const [postId] = useState(uuid());
+  const [coverImg, setCoverImg] = useState("");
+  const [postImg, setPostImg] = useState("");
 
   const {
     register,
@@ -37,11 +24,6 @@ function Form({ pathname }) {
     watch,
     formState: { errors },
   } = useForm();
-
-  // temporary
-  if (Object.keys(errors).length > 0) {
-    console.warn(errors);
-  }
 
   // handles form submit
   const onSubmit = (data) => {
@@ -58,15 +40,21 @@ function Form({ pathname }) {
       hearts: 0,
     };
     if (pathname === "/new") {
-      createPost(postData);
+      createPost(postData, postId);
     }
   };
 
   // handles cover image upload
-  const uploadFile = async (e) => {
+  const uploadImg = async (e, imgType) => {
     const file = e.target.files[0];
-    const url = await uploadCoverImg(file);
-    setCoverImg(url);
+    if (!file) return;
+    if (imgType === "coverImg") {
+      const url = await uploadCoverImg(file, postId);
+      setCoverImg(url);
+    } else if (imgType === "postImg") {
+      const url = await uploadPostImg(file, postId);
+      setPostImg(url);
+    }
   };
 
   return (
@@ -80,27 +68,54 @@ function Form({ pathname }) {
             className="text-5xl font-extrabold outline-none"
             maxLength={60}
             {...register("title", {
-              required: true,
-              minLength: 1,
-              maxLength: 60,
+              required: "Title is required",
+              minLength: {
+                value: 1,
+                message: "Title must contain at least 1 character",
+              },
+              maxLength: {
+                value: 60,
+                message: "Title must contain at most 60 characters",
+              },
+              validate: async (value) =>
+                !(await checkSlugExists(kebabCase(value))) ||
+                "You already have a post with this title",
             })}
           />
+          {errors.title && (
+            <span className="text-sm text-red-500">{errors.title.message}</span>
+          )}
           {/* Description */}
-          <textarea
+          <Controller
             name="description"
-            cols="30"
-            rows="1"
-            placeholder="New post description here..."
-            className="mt-5 mb-3 resize-none text-xl font-medium outline-none"
-            maxLength={125}
-            {...register("description", {
-              required: true,
-              minLength: 1,
-              maxLength: 125,
-            })}
-          ></textarea>
+            control={control}
+            rules={{
+              required: "Post description is required",
+              minLength: {
+                value: 1,
+                message: "Post description must contain at least 1 character",
+              },
+              maxLength: {
+                value: 125,
+                message: "Post description must contain at most 125 characters",
+              },
+            }}
+            render={({ field }) => (
+              <TextareaAutosize
+                {...field}
+                placeholder="New post description here..."
+                className="mt-5 h-7 resize-none text-xl font-medium outline-none"
+                maxLength={125}
+              />
+            )}
+          />
+          {errors.description && (
+            <span className="text-sm text-red-500">
+              {errors.description.message}
+            </span>
+          )}
           {/* Cover Image */}
-          <div className="flex">
+          <div className="mt-4 flex">
             <div className="relative">
               <button
                 type="button"
@@ -124,13 +139,13 @@ function Form({ pathname }) {
               <Controller
                 name="coverImg"
                 control={control}
-                rules={{ required: true }}
+                rules={{ required: "A cover image is required" }}
                 render={({ field }) => (
                   <input
                     type="file"
                     className="absolute top-0 left-0 h-full w-full max-w-full cursor-pointer overflow-hidden pl-32 text-blue-100 opacity-0"
                     onChange={(e) => {
-                      uploadFile(e);
+                      uploadImg(e, "coverImg");
                       field.onChange(e.target.files[0]);
                     }}
                     accept="image/x-png,image/gif,image/jpeg"
@@ -139,51 +154,87 @@ function Form({ pathname }) {
               />
             </div>
           </div>
+          {errors.coverImg && (
+            <span className="text-sm text-red-500">
+              {errors.coverImg.message}
+            </span>
+          )}
           {coverImg && (
             <div className="mt-5">
               <img src={coverImg} alt="" className="w-full" />
             </div>
           )}
           {/* Image Upload*/}
-          <div className="mt-5 mb-[2px] flex w-full rounded-lg border-[1px] border-solid border-neutral-400">
-            <button className="flex gap-2 rounded-lg border-r-[1px] border-neutral-400 px-3 py-2 hover:bg-gray-200">
-              <img src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fimage.svg?alt=media&token=9c73154c-ed90-4380-a14f-275ad2e399c5" />
-              Upload Image
-            </button>
-            <button className="rounded-lg border-x-[1px] border-neutral-400 px-3 py-2 hover:bg-gray-200">
+          <div className="mt-5 flex w-full divide-x-[1px] divide-dashed divide-slate-400 rounded-t-lg border-[1px] border-b-0 border-solid border-neutral-400">
+            <div className="relative">
+              <button
+                className="flex h-full min-w-[155px] items-center gap-2 whitespace-nowrap px-3 py-2 hover:bg-gray-200"
+                type="button"
+              >
+                <img src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fimage.svg?alt=media&token=9c73154c-ed90-4380-a14f-275ad2e399c5" />
+                Upload Image
+              </button>
+              <input
+                type="file"
+                className="cursor-pointerpl-20 absolute top-0 left-0 h-full w-full opacity-0"
+                onChange={(e) => uploadImg(e, "postImg")}
+                accept="image/x-png,image/gif,image/jpeg"
+              />
+            </div>
+            <button
+              className="min-w-[44px] px-3 py-2 hover:bg-gray-200"
+              type="button"
+              onClick={() => {
+                navigator.clipboard.writeText(`![alt text](${postImg})`);
+              }}
+            >
               <img
                 src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fcopy.svg?alt=media&token=c5904ef5-d83e-45e4-8495-1eb1e2355a76"
                 alt=""
               />
             </button>
-            <p
-              className={`overflow-x-auto rounded-lg border-l-[1px] border-neutral-400 px-3 py-2 ${
-                newImgLink ? "text-black" : "text-neutral-500"
+            <span
+              className={`overflow-x-auto whitespace-nowrap px-3 py-2 ${
+                postImg ? "text-black" : "text-neutral-500"
               }`}
             >
-              {newImgLink
-                ? `![alt text](${newImgLink})`
+              {postImg
+                ? `![alt text](${postImg})`
                 : "Uploaded image link will show up here..."}
-            </p>
+            </span>
           </div>
           {/* Post Content */}
-          <textarea
-            name="post"
-            rows="15"
-            cols="30"
-            placeholder="Write your post content here..."
-            className="resize-none rounded-lg border-[1px] border-solid border-neutral-400 p-3 outline-none"
-            {...register("postContent", {
-              required: true,
-              minLength: 1,
-            })}
-          ></textarea>
+          <Controller
+            name="postContent"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "Post content is required",
+              minLength: {
+                value: 1,
+                message: "Post content must contain at least 1 character",
+              },
+            }}
+            render={({ field }) => (
+              <TextareaAutosize
+                {...field}
+                placeholder="Write your post content here..."
+                className="resize-none overflow-hidden rounded-b-lg border-[1px] border-solid border-neutral-400 p-3 outline-none"
+                minRows={10}
+              />
+            )}
+          />
+          {errors.postContent && (
+            <span className="text-sm text-red-500">
+              {errors.postContent.message}
+            </span>
+          )}
         </div>
       )}
       {!isEdit && (
         <div className="mt-3 flex flex-col rounded-lg px-10 py-10 shadow-2xl">
           <ReactMarkdown className={style.markdown}>
-            {postContent}
+            {watch("postContent")}
           </ReactMarkdown>
         </div>
       )}
@@ -205,6 +256,8 @@ function Form({ pathname }) {
 export default function EditPost() {
   const pathname = usePathname();
 
+  const [isEdit, setIsEdit] = useState(true);
+
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-[900px]">
@@ -213,15 +266,21 @@ export default function EditPost() {
             {pathname === "/new" ? "Create Post" : "Edit Post"}
           </span>
           <div className="flex gap-4">
-            <button className={isEdit ? "text-black" : "text-neutral-500"}>
+            <button
+              className={isEdit ? "text-black" : "text-neutral-500"}
+              onClick={() => setIsEdit(true)}
+            >
               Edit
             </button>
-            <button className={!isEdit ? "text-black" : "text-neutral-500"}>
+            <button
+              className={!isEdit ? "text-black" : "text-neutral-500"}
+              onClick={() => setIsEdit(false)}
+            >
               Preview
             </button>
           </div>
         </div>
-        <Form pathname={pathname} />
+        <Form pathname={pathname} isEdit={isEdit} />
       </div>
     </div>
   );
