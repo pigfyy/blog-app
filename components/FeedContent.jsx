@@ -19,7 +19,12 @@ export default function FeedContent({ img, author, title, preview, hearts }) {
 
   return (
     <div className="flex w-[374px] flex-col overflow-hidden rounded-lg border-[1px] border-neutral-200">
-      <img src={img} alt="" />
+      <img
+        src={img}
+        alt=""
+        referrerPolicy="no-referrer"
+        className="h-[160px]"
+      />
       <div className="flex flex-col px-6 py-10">
         <Link href={`/${kebabCase(author)}`}>
           <span className="text-xs font-bold leading-8 text-neutral-600 hover:cursor-pointer hover:underline">
@@ -27,9 +32,9 @@ export default function FeedContent({ img, author, title, preview, hearts }) {
           </span>
         </Link>
         <Link href={`/${kebabCase(author)}/${kebabCase(title)}`}>
-          <span className="mb-2 text-xl font-bold leading-8 text-neutral-900 hover:text-blue-700">
+          <p className="mb-2 text-xl font-bold leading-6 text-neutral-900 hover:text-blue-700">
             {title}
-          </span>
+          </p>
         </Link>
         <p className="text-base font-normal leading-6  text-neutral-600">
           {preview}
