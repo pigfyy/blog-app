@@ -12,8 +12,8 @@ import { v4 as uuid } from "uuid";
 import { useEffect, useState } from "react";
 
 function Form({ pathname, isEdit, defaultValues }) {
-  const [postId] = useState(uuid());
-  const [coverImg, setCoverImg] = useState("");
+  const [postId, setPostId] = useState("");
+  const [postCover, setPostCover] = useState("");
   const [postImg, setPostImg] = useState("");
 
   const {
@@ -25,36 +25,40 @@ function Form({ pathname, isEdit, defaultValues }) {
   } = useForm();
 
   useEffect(() => {
-    if (defaultValues) setCoverImg(defaultValues.coverImg);
+    defaultValues
+      ? (setPostCover(defaultValues.postCover), setPostId(defaultValues.postId))
+      : setPostId(uuid());
   }, []);
+
+  // console.log(defaultValues);
 
   // handles form submit
   const onSubmit = (data) => {
     const postData = {
-      postTitle: data.title,
-      postDescription: data.description,
+      postTitle: data.postTitle,
+      postDescription: data.postDescription,
       postContent: data.postContent,
-      postCover: coverImg,
+      postCover: postCover,
       dateCreated: null,
       dateEdited: null,
+      authorName: null,
       authorUsername: null,
       authorPfp: null,
+      authorId: null,
       readTime: null,
       hearts: 0,
     };
-    if (pathname === "/new") {
-      setPost(postData, postId);
-    } else {
-    }
+
+    setPost(postData, postId, defaultValues);
   };
 
   // handles cover image upload
   const uploadImg = async (e, imgType) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (imgType === "coverImg") {
+    if (imgType === "postCover") {
       const url = await uploadCoverImg(file, postId);
-      setCoverImg(url);
+      setPostCover(url);
     } else if (imgType === "postImg") {
       const url = await uploadPostImg(file, postId);
       setPostImg(url);
@@ -71,8 +75,8 @@ function Form({ pathname, isEdit, defaultValues }) {
             placeholder="New post title here..."
             className="text-5xl font-extrabold outline-none"
             maxLength={60}
-            defaultValue={defaultValues?.title || ""}
-            {...register("title", {
+            defaultValue={defaultValues?.postTitle || ""}
+            {...register("postTitle", {
               required: "Title is required",
               minLength: {
                 value: 1,
@@ -83,18 +87,20 @@ function Form({ pathname, isEdit, defaultValues }) {
                 message: "Title must contain at most 60 characters",
               },
               validate: async (value) =>
-                !(await checkSlugExists(kebabCase(value))) ||
+                !(await checkSlugExists(kebabCase(value), postId)) ||
                 "You already have a post with this title",
             })}
           />
-          {errors.title && (
-            <span className="text-sm text-red-500">{errors.title.message}</span>
+          {errors.postTitle && (
+            <span className="text-sm text-red-500">
+              {errors.postTitle.message}
+            </span>
           )}
           {/* Description */}
           <Controller
-            name="description"
+            name="postDescription"
             control={control}
-            defaultValue={defaultValues?.description || ""}
+            defaultValue={defaultValues?.postDescription || ""}
             rules={{
               required: "Post description is required",
               minLength: {
@@ -115,9 +121,9 @@ function Form({ pathname, isEdit, defaultValues }) {
               />
             )}
           />
-          {errors.description && (
+          {errors.postDescription && (
             <span className="text-sm text-red-500">
-              {errors.description.message}
+              {errors.postDescription.message}
             </span>
           )}
           {/* Cover Image */}
@@ -127,7 +133,7 @@ function Form({ pathname, isEdit, defaultValues }) {
                 type="button"
                 className="flex gap-2 rounded-lg border-[1px] border-blue-600 px-3 py-2 hover:shadow-md"
               >
-                {!coverImg ? (
+                {!postCover ? (
                   <>
                     <img src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fimage.svg?alt=media&token=9c73154c-ed90-4380-a14f-275ad2e399c5" />
                     Add Cover Image
@@ -143,16 +149,16 @@ function Form({ pathname, isEdit, defaultValues }) {
                 )}
               </button>
               <Controller
-                name="coverImg"
+                name="postCover"
                 control={control}
                 rules={{ required: "A cover image is required" }}
-                defaultValue={defaultValues?.coverImg || ""}
+                defaultValue={defaultValues?.postCover || ""}
                 render={({ field }) => (
                   <input
                     type="file"
                     className="absolute top-0 left-0 h-full w-full max-w-full cursor-pointer overflow-hidden pl-32 text-blue-100 opacity-0"
                     onChange={(e) => {
-                      uploadImg(e, "coverImg");
+                      uploadImg(e, "postCover");
                       field.onChange(e.target.files[0]);
                     }}
                     accept="image/x-png,image/gif,image/jpeg"
@@ -161,14 +167,14 @@ function Form({ pathname, isEdit, defaultValues }) {
               />
             </div>
           </div>
-          {errors.coverImg && (
+          {errors.postCover && (
             <span className="text-sm text-red-500">
-              {errors.coverImg.message}
+              {errors.postCover.message}
             </span>
           )}
-          {coverImg && (
+          {postCover && (
             <div className="mt-5">
-              <img src={coverImg} alt="" className="w-full" />
+              <img src={postCover} alt="" className="w-full" />
             </div>
           )}
           {/* Image Upload*/}
