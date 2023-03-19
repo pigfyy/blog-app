@@ -234,7 +234,7 @@ function Form({ pathname, isEdit }) {
       {!isEdit && (
         <div className="mt-3 flex flex-col rounded-lg px-10 py-10 shadow-2xl">
           <ReactMarkdown className={style.markdown}>
-            {watch("postContent")}
+            {watch("postContent") || "Post content will show up here..."}
           </ReactMarkdown>
         </div>
       )}

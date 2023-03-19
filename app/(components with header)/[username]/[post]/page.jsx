@@ -2,75 +2,50 @@ import ReactMarkdown from "react-markdown";
 import style from "@/components/markdown-styles.module.css";
 import Link from "next/link";
 import LinkToEdit from "@/components/LinkToEdit";
+import { getPost } from "@/lib/firestore";
 
-const postContent = `# requirements
+export default async function PostPage({ params }) {
+  let post = await getPost(params.username, params.post);
 
-## pages:
-
-  - homepage: display recent posts
-  - user profile page: displays their recent posts
-  - post page: displays name, time created, last edited hearts, post content in markdown
-  - login page: login with google
-  - admin page: create posts, and add functionality to other pages if admin (edit post, etc.)
-`;
-
-const data = {
-  userPfp:
-    "https://cdn.discordapp.com/avatars/368167875740958721/36a8b24e792f03e2c0d037c9e1016600.png?size=4096",
-  username: "Pigfy",
-  postTitle: "Creative Eye-Catching Title",
-  dateCreated: "Feb 10",
-  dateEdited: "Feb 13",
-  readTime: "5",
-  hearts: "10",
-  postContent: postContent,
-  postCover:
-    "https://miro.medium.com/v2/resize:fit:720/format:webp/1*-Y9ozbNWSViiCmal1TT32w.jpeg",
-  postDescription:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-  isAdmin: true,
-};
-
-export default function PostPage() {
-  const {
-    userPfp,
-    username,
-    dateCreated,
-    dateEdited,
-    readTime,
-    hearts,
-    postTitle,
-    postDescription,
-    postCover,
-    postContent,
-    isAdmin,
-  } = data;
+  // format date
+  const optionsNoYear = { month: "short", day: "numeric" };
+  const optionsWithYear = { month: "short", day: "numeric", year: "numeric" };
+  post.dateCreated = post.dateCreated.toLocaleDateString(
+    "en-US",
+    post.dateEdited < new Date().getFullYear() ? optionsWithYear : optionsNoYear
+  );
+  post.dateEdited = post.dateEdited.toLocaleDateString(
+    "en-US",
+    post.dateEdited < new Date().getFullYear() ? optionsWithYear : optionsNoYear
+  );
 
   return (
     <div className="flex justify-center">
-      <div className="mt-4 max-w-[900px]">
+      <div className="w-full max-w-[900px] rounded-lg px-10 py-10 shadow-2xl">
         <div className="flex justify-between">
           <div className="flex gap-4">
             <div className="h-12 w-12 overflow-hidden rounded-full">
-              <img src={userPfp} alt="" />
+              <img src={post.authorPfp} alt="" />
             </div>
             <div>
-              <Link href={`/${username.toLowerCase()}`}>
+              <Link href={`/${post.authorUsername}`}>
                 <p className="text-base font-normal hover:underline">
-                  {username}
+                  {post.authorName}
                 </p>
               </Link>
               <span className="text-sm text-neutral-500">
-                {dateCreated} (Edit: {dateEdited})
+                {post.dateCreated}
+                {post.dateCreated !== post.dateEdited &&
+                  ` (Edit: ${post.dateEdited})`}
               </span>
               <span className="px-2 text-sm text-neutral-500">·</span>
               <span className="text-sm text-neutral-500">
-                {readTime} min read
+                {post.readTime} min read
               </span>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            {isAdmin && <LinkToEdit />}
+            <LinkToEdit params={params} />
             <div className="flex gap-1">
               <button className="my-auto">
                 <img
@@ -80,17 +55,19 @@ export default function PostPage() {
                 />
               </button>
               <span className="my-auto text-xl font-medium leading-4 text-neutral-500">
-                {hearts}
+                {post.hearts}
               </span>
             </div>
           </div>
         </div>
-        <h1 className="mt-8 text-3xl font-bold">{postTitle}</h1>
-        <p className="mt-3 text-lg text-neutral-600">{postDescription}</p>
+        <h1 className="mt-8 text-3xl font-bold">{post.postTitle}</h1>
+        <p className="mt-3 text-lg text-neutral-600">{post.postDescription}</p>
         <div className="mt-5 mb-5 w-full">
-          <img src={postCover} alt="" className="w-full" />
+          <img src={post.postCover} alt="" className="w-full" />
         </div>
-        <ReactMarkdown className={style.markdown}>{postContent}</ReactMarkdown>
+        <ReactMarkdown className={style.markdown}>
+          {post.postContent}
+        </ReactMarkdown>
       </div>
     </div>
   );

@@ -1,22 +1,15 @@
-"use client";
-
-import { usePathname } from "next/navigation";
 import Link from "next/link";
-import kebabCase from "lodash.kebabcase";
-import { auth } from "@/lib/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function FeedContent({ img, author, title, preview, hearts }) {
-  const [user] = useAuthState(auth);
-
-  const pathname = usePathname();
-  const isAdmin = (() => {
-    if (user) {
-      return kebabCase(user.displayName) === pathname.slice(1);
-    }
-    return false;
-  })();
-
+export default function FeedContent({
+  img,
+  author,
+  authorUsername,
+  title,
+  slug,
+  preview,
+  hearts,
+  isAdmin,
+}) {
   return (
     <div className="flex w-[374px] flex-col overflow-hidden rounded-lg border-[1px] border-neutral-200">
       <img
@@ -26,12 +19,12 @@ export default function FeedContent({ img, author, title, preview, hearts }) {
         className="h-[160px]"
       />
       <div className="flex flex-col px-6 py-10">
-        <Link href={`/${kebabCase(author)}`}>
+        <Link href={`/${authorUsername}`}>
           <span className="text-xs font-bold leading-8 text-neutral-600 hover:cursor-pointer hover:underline">
             {author}
           </span>
         </Link>
-        <Link href={`/${kebabCase(author)}/${kebabCase(title)}`}>
+        <Link href={`/${authorUsername}/${slug}`}>
           <p className="mb-2 text-xl font-bold leading-6 text-neutral-900 hover:text-blue-700">
             {title}
           </p>
@@ -41,7 +34,7 @@ export default function FeedContent({ img, author, title, preview, hearts }) {
         </p>
         <div className="mt-8 flex justify-between">
           {!isAdmin && (
-            <Link href={`/${kebabCase(author)}/${kebabCase(title)}`}>
+            <Link href={`/${authorUsername}/${slug}`}>
               <button className="rounded-lg border-[1px] border-blue-600 px-6 py-[14px] text-base font-medium leading-4 text-blue-600">
                 Learn More {"->"}
               </button>
@@ -49,7 +42,7 @@ export default function FeedContent({ img, author, title, preview, hearts }) {
           )}
           {isAdmin && (
             <div className="flex gap-3">
-              <Link href={`/${kebabCase(author)}/${kebabCase(title)}/edit`}>
+              <Link href={`/${authorUsername}/${slug}/edit`}>
                 <button className="rounded-lg border-[1px] border-blue-600 p-3 text-base font-medium leading-4 text-blue-600">
                   <img
                     src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fedit.svg?alt=media&token=6d372210-3e2a-43ad-8b7e-76f9a10547f8"

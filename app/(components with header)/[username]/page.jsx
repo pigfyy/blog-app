@@ -22,7 +22,7 @@ export default async function Profile({ params }) {
           <div>
             <div className="flex justify-between">
               <h1 className="text-3xl">{username}</h1>
-              <LinkToEdit />
+              <LinkToEdit params={params} />
             </div>
             <h2 className="text-base text-neutral-500">{userData.name}</h2>
           </div>

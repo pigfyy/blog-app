@@ -4,11 +4,14 @@ import FeedContent from "./FeedContent";
 import { v4 as uuid } from "uuid";
 import { getPosts, getMorePosts, getLastPost } from "@/lib/firestore";
 import { useState, useEffect } from "react";
+import { useAppStore } from "@/lib/store";
 
 export default function PostFeed({ params }) {
   const [posts, setPosts] = useState([]);
   const [lastVisible, setLastVisible] = useState(null);
   const [lastPost, setLastPost] = useState([]);
+
+  const { userUsername } = useAppStore();
 
   const isProfile = params.username ? true : false;
 
@@ -47,9 +50,12 @@ export default function PostFeed({ params }) {
         <FeedContent
           img={posts[i].postCover}
           author={posts[i].authorName}
+          authorUsername={posts[i].authorUsername}
           title={posts[i].postTitle}
+          slug={posts[i].slug}
           preview={posts[i].postDescription}
           hearts={posts[i].hearts}
+          isAdmin={posts[i].authorUsername === userUsername ? true : false}
           key={uuid()}
         />
       );
