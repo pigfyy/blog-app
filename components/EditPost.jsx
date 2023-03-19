@@ -6,13 +6,12 @@ import { usePathname } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
 import { uploadCoverImg, uploadPostImg } from "@/lib/storage";
-import { useAppStore } from "@/lib/store";
-import { createPost, checkSlugExists } from "@/lib/firestore";
+import { setPost, checkSlugExists } from "@/lib/firestore";
 import kebabCase from "lodash.kebabcase";
 import { v4 as uuid } from "uuid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function Form({ pathname, isEdit }) {
+function Form({ pathname, isEdit, defaultValues }) {
   const [postId] = useState(uuid());
   const [coverImg, setCoverImg] = useState("");
   const [postImg, setPostImg] = useState("");
@@ -24,6 +23,10 @@ function Form({ pathname, isEdit }) {
     watch,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    if (defaultValues) setCoverImg(defaultValues.coverImg);
+  }, []);
 
   // handles form submit
   const onSubmit = (data) => {
@@ -40,7 +43,8 @@ function Form({ pathname, isEdit }) {
       hearts: 0,
     };
     if (pathname === "/new") {
-      createPost(postData, postId);
+      setPost(postData, postId);
+    } else {
     }
   };
 
@@ -67,6 +71,7 @@ function Form({ pathname, isEdit }) {
             placeholder="New post title here..."
             className="text-5xl font-extrabold outline-none"
             maxLength={60}
+            defaultValue={defaultValues?.title || ""}
             {...register("title", {
               required: "Title is required",
               minLength: {
@@ -89,6 +94,7 @@ function Form({ pathname, isEdit }) {
           <Controller
             name="description"
             control={control}
+            defaultValue={defaultValues?.description || ""}
             rules={{
               required: "Post description is required",
               minLength: {
@@ -140,6 +146,7 @@ function Form({ pathname, isEdit }) {
                 name="coverImg"
                 control={control}
                 rules={{ required: "A cover image is required" }}
+                defaultValue={defaultValues?.coverImg || ""}
                 render={({ field }) => (
                   <input
                     type="file"
@@ -207,7 +214,6 @@ function Form({ pathname, isEdit }) {
           <Controller
             name="postContent"
             control={control}
-            defaultValue=""
             rules={{
               required: "Post content is required",
               minLength: {
@@ -215,6 +221,7 @@ function Form({ pathname, isEdit }) {
                 message: "Post content must contain at least 1 character",
               },
             }}
+            defaultValue={defaultValues?.postContent || ""}
             render={({ field }) => (
               <TextareaAutosize
                 {...field}
@@ -253,7 +260,7 @@ function Form({ pathname, isEdit }) {
   );
 }
 
-export default function EditPost() {
+export default function EditPost({ defaultValues }) {
   const pathname = usePathname();
 
   const [isEdit, setIsEdit] = useState(true);
@@ -280,7 +287,11 @@ export default function EditPost() {
             </button>
           </div>
         </div>
-        <Form pathname={pathname} isEdit={isEdit} />
+        <Form
+          pathname={pathname}
+          isEdit={isEdit}
+          defaultValues={defaultValues}
+        />
       </div>
     </div>
   );
