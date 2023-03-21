@@ -10,13 +10,21 @@ export default async function PostPage({ params }) {
   // format date
   const optionsNoYear = { month: "short", day: "numeric" };
   const optionsWithYear = { month: "short", day: "numeric", year: "numeric" };
-  post.dateCreated = post.dateCreated.toLocaleDateString(
+  let dateCreated = new Date(post.dateCreated);
+  let dateEdited = new Date(post.dateEdited);
+
+  post.dateCreated = dateCreated.toLocaleDateString(
     "en-US",
-    post.dateEdited < new Date().getFullYear() ? optionsWithYear : optionsNoYear
+    dateCreated.getFullYear() < new Date().getFullYear()
+      ? optionsWithYear
+      : optionsNoYear
   );
-  post.dateEdited = post.dateEdited.toLocaleDateString(
+
+  post.dateEdited = dateEdited.toLocaleDateString(
     "en-US",
-    post.dateEdited < new Date().getFullYear() ? optionsWithYear : optionsNoYear
+    dateEdited.getFullYear() < new Date().getFullYear()
+      ? optionsWithYear
+      : optionsNoYear
   );
 
   return (

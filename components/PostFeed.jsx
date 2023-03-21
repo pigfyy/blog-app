@@ -11,12 +11,11 @@ export default function PostFeed({ params }) {
   const [lastVisible, setLastVisible] = useState(null);
   const [lastPost, setLastPost] = useState([]);
 
-  const { userUsername } = useAppStore();
-
-  const isProfile = params.username ? true : false;
+  let { userUsername, userId } = useAppStore();
 
   // utility function to set posts and lastVisible state
   const setStates = (ret, lastPost) => {
+    if (!ret.posts.length) return;
     setPosts(posts.concat(ret.posts));
     if (ret.lastVisible.data().slug === lastPost.data().slug) {
       setLastVisible(null);
@@ -27,17 +26,18 @@ export default function PostFeed({ params }) {
 
   // get posts on mount
   useEffect(() => {
-    getLastPost(isProfile).then((lastPost) => {
+    if (!userId) return;
+    getLastPost(params.username).then((lastPost) => {
       setLastPost(lastPost);
-      getPosts(isProfile).then((ret) => {
+      getPosts(params.username).then((ret) => {
         setStates(ret, lastPost);
       });
     });
-  }, []);
+  }, [userId]);
 
   // load more posts on click
   const loadPosts = () => {
-    getMorePosts(lastVisible, isProfile).then((ret) => {
+    getMorePosts(lastVisible, params.username).then((ret) => {
       setStates(ret, lastPost);
     });
   };

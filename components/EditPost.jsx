@@ -11,7 +11,7 @@ import kebabCase from "lodash.kebabcase";
 import { v4 as uuid } from "uuid";
 import { useEffect, useState } from "react";
 
-function Form({ pathname, isEdit, defaultValues }) {
+function Form({ isEdit, defaultValues }) {
   const [postId, setPostId] = useState("");
   const [postCover, setPostCover] = useState("");
   const [postImg, setPostImg] = useState("");
@@ -30,8 +30,6 @@ function Form({ pathname, isEdit, defaultValues }) {
       : setPostId(uuid());
   }, []);
 
-  // console.log(defaultValues);
-
   // handles form submit
   const onSubmit = (data) => {
     const postData = {
@@ -39,14 +37,6 @@ function Form({ pathname, isEdit, defaultValues }) {
       postDescription: data.postDescription,
       postContent: data.postContent,
       postCover: postCover,
-      dateCreated: null,
-      dateEdited: null,
-      authorName: null,
-      authorUsername: null,
-      authorPfp: null,
-      authorId: null,
-      readTime: null,
-      hearts: 0,
     };
 
     setPost(postData, postId, defaultValues);
