@@ -17,7 +17,7 @@ export default function PostFeed({ params }) {
   const setStates = (ret, lastPost) => {
     if (!ret.posts.length) return;
     setPosts(posts.concat(ret.posts));
-    if (ret.lastVisible.data().slug === lastPost.data().slug) {
+    if (ret.lastVisible.data().slug === lastPost.slug) {
       setLastVisible(null);
     } else {
       setLastVisible(ret.lastVisible);
@@ -45,21 +45,20 @@ export default function PostFeed({ params }) {
   // create post feed using posts state
   const createFeed = () => {
     let feed = [];
-    for (let i = 0; i < posts.length; i++) {
+    posts.forEach((post) => {
       feed.push(
         <FeedContent
-          img={posts[i].postCover}
-          author={posts[i].authorName}
-          authorUsername={posts[i].authorUsername}
-          title={posts[i].postTitle}
-          slug={posts[i].slug}
-          preview={posts[i].postDescription}
-          hearts={posts[i].hearts}
-          isAdmin={posts[i].authorUsername === userUsername ? true : false}
+          img={post.postCover}
+          author={post.authorName}
+          authorUsername={post.authorUsername}
+          title={post.postTitle}
+          slug={post.slug}
+          preview={post.postDescription}
+          isAdmin={post.authorUsername === userUsername ? true : false}
           key={uuid()}
         />
       );
-    }
+    });
     return feed;
   };
 

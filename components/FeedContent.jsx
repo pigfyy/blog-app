@@ -1,4 +1,6 @@
+import { getHeartCount } from "@/lib/firestore";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 export default function FeedContent({
   img,
@@ -7,9 +9,16 @@ export default function FeedContent({
   title,
   slug,
   preview,
-  hearts,
   isAdmin,
 }) {
+  const [heartCount, setHeartCount] = useState(0);
+
+  useEffect(() => {
+    getHeartCount(authorUsername, slug).then((count) => {
+      setHeartCount(count);
+    });
+  }, []);
+
   return (
     <div className="flex w-[374px] flex-col overflow-hidden rounded-lg border-[1px] border-neutral-200">
       <img
@@ -66,7 +75,7 @@ export default function FeedContent({
               />
             </div>
             <span className="my-auto text-base font-medium leading-4 text-neutral-500">
-              {hearts}
+              {heartCount}
             </span>
           </div>
         </div>

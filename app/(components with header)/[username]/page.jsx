@@ -16,6 +16,7 @@ export default async function Profile({ params }) {
             src={userData.pfp}
             alt=""
             className="w-[150px] max-w-[150px] rounded-full"
+            referrerPolicy="no-referrer"
           />
         </div>
         <div className="flex min-w-[300px] max-w-[600px] flex-col gap-3">

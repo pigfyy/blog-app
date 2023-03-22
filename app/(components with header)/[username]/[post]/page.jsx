@@ -7,8 +7,6 @@ import ViewPost from "@/components/ViewPost";
 export default async function PostPage({ params }) {
   let post = await getPost(params.username, params.post);
 
-  console.log(params);
-
   // format date
   const optionsNoYear = { month: "short", day: "numeric" };
   const optionsWithYear = { month: "short", day: "numeric", year: "numeric" };
