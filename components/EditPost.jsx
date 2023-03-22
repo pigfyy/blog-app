@@ -1,7 +1,5 @@
 "use client";
 
-import ReactMarkdown from "react-markdown";
-import style from "./markdown-styles.module.css";
 import { usePathname } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
@@ -10,6 +8,7 @@ import { setPost, checkSlugExists } from "@/lib/firestore";
 import kebabCase from "lodash.kebabcase";
 import { v4 as uuid } from "uuid";
 import { useEffect, useState } from "react";
+import ViewPost from "./ViewPost";
 
 function Form({ isEdit, defaultValues }) {
   const [postId, setPostId] = useState("");
@@ -53,6 +52,14 @@ function Form({ isEdit, defaultValues }) {
       const url = await uploadPostImg(file, postId);
       setPostImg(url);
     }
+  };
+
+  // create post object for preview
+  const post = {
+    postTitle: watch("postTitle"),
+    postDescription: watch("postDescription"),
+    postCover: postCover,
+    postContent: watch("postContent"),
   };
 
   return (
@@ -236,9 +243,7 @@ function Form({ isEdit, defaultValues }) {
       )}
       {!isEdit && (
         <div className="mt-3 flex flex-col rounded-lg px-10 py-10 shadow-2xl">
-          <ReactMarkdown className={style.markdown}>
-            {watch("postContent") || "Post content will show up here..."}
-          </ReactMarkdown>
+          <ViewPost post={post} />
         </div>
       )}
       <div className="mt-5 flex gap-2">

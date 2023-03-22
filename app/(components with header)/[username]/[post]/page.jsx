@@ -1,25 +1,25 @@
-import ReactMarkdown from "react-markdown";
-import style from "@/components/markdown-styles.module.css";
 import Link from "next/link";
 import LinkToEdit from "@/components/LinkToEdit";
+import HeartButton from "./HeartButton";
 import { getPost } from "@/lib/firestore";
+import ViewPost from "@/components/ViewPost";
 
 export default async function PostPage({ params }) {
   let post = await getPost(params.username, params.post);
+
+  console.log(params);
 
   // format date
   const optionsNoYear = { month: "short", day: "numeric" };
   const optionsWithYear = { month: "short", day: "numeric", year: "numeric" };
   let dateCreated = new Date(post.dateCreated);
   let dateEdited = new Date(post.dateEdited);
-
   post.dateCreated = dateCreated.toLocaleDateString(
     "en-US",
     dateCreated.getFullYear() < new Date().getFullYear()
       ? optionsWithYear
       : optionsNoYear
   );
-
   post.dateEdited = dateEdited.toLocaleDateString(
     "en-US",
     dateEdited.getFullYear() < new Date().getFullYear()
@@ -54,28 +54,10 @@ export default async function PostPage({ params }) {
           </div>
           <div className="flex items-center gap-3">
             <LinkToEdit params={params} />
-            <div className="flex gap-1">
-              <button className="my-auto">
-                <img
-                  src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fheart.svg?alt=media&token=e41bf294-f439-41f5-b654-72aaa16422e2"
-                  alt=""
-                  className="w-6"
-                />
-              </button>
-              <span className="my-auto text-xl font-medium leading-4 text-neutral-500">
-                {post.hearts}
-              </span>
-            </div>
+            <HeartButton params={params} />
           </div>
         </div>
-        <h1 className="mt-8 text-3xl font-bold">{post.postTitle}</h1>
-        <p className="mt-3 text-lg text-neutral-600">{post.postDescription}</p>
-        <div className="mt-5 mb-5 w-full">
-          <img src={post.postCover} alt="" className="w-full" />
-        </div>
-        <ReactMarkdown className={style.markdown}>
-          {post.postContent}
-        </ReactMarkdown>
+        <ViewPost params={params} post={post} />
       </div>
     </div>
   );
