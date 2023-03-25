@@ -31,9 +31,9 @@ export default function FeedContent({
     <div className="flex w-[374px] flex-col overflow-hidden rounded-lg border-[1px] border-neutral-200">
       <img
         src={img}
-        alt=""
+        alt="Post cover"
         referrerPolicy="no-referrer"
-        className="h-[160px]"
+        className="h-[160px] object-cover"
       />
       <div className="flex flex-col px-6 py-10">
         <Link href={`/${authorUsername}`}>
@@ -63,7 +63,7 @@ export default function FeedContent({
                 <button className="rounded-lg border-[1px] border-blue-600 p-3 text-base font-medium leading-4 text-blue-600">
                   <img
                     src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fedit.svg?alt=media&token=6d372210-3e2a-43ad-8b7e-76f9a10547f8"
-                    alt=""
+                    alt="Pen icon"
                   />
                 </button>
               </Link>
@@ -73,7 +73,7 @@ export default function FeedContent({
               >
                 <img
                   src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fdelete.svg?alt=media&token=c902693d-5254-4fda-9718-278837036145"
-                  alt=""
+                  alt="Trash icon"
                 />
               </button>
             </div>
@@ -82,7 +82,7 @@ export default function FeedContent({
             <div className="my-auto w-4">
               <img
                 src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fheart.svg?alt=media&token=e41bf294-f439-41f5-b654-72aaa16422e2"
-                alt=""
+                alt="Heart icon"
               />
             </div>
             <span className="my-auto text-base font-medium leading-4 text-neutral-500">

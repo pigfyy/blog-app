@@ -12,7 +12,7 @@ export default function Button() {
         <div className="h-[22px] w-[22px]">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-            alt=""
+            alt="Google logo"
           />
         </div>
         <span className="text-neutral-450 text-[14px] font-medium">

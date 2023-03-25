@@ -33,7 +33,7 @@ export default async function PostPage({ params }) {
             <div className="overflow-hidden rounded-full">
               <img
                 src={post.authorPfp}
-                alt=""
+                alt={`${post.authorUsername}'s profile picture`}
                 className="h-12 w-12 object-cover"
               />
             </div>

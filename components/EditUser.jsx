@@ -47,7 +47,7 @@ export default function EditUser({ user }) {
               <button className="overflow-hidden rounded-full group-hover:brightness-75">
                 <img
                   src={pfp || user.photoURL}
-                  alt=""
+                  alt="Profile Picture"
                   className="h-64 w-64 overflow-hidden rounded-full"
                   referrerPolicy="no-referrer"
                 />

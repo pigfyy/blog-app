@@ -18,7 +18,7 @@ export default async function Profile({ params }) {
         <div>
           <img
             src={userData.pfp}
-            alt=""
+            alt={`${username}'s profile picture`}
             className="h-[150px] max-h-[150px] w-[150px] max-w-[150px] rounded-full object-cover"
             referrerPolicy="no-referrer"
           />

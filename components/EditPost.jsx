@@ -154,7 +154,7 @@ function Form({ isEdit, defaultValues }) {
                   <>
                     <img
                       src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fedit.svg?alt=media&token=6d372210-3e2a-43ad-8b7e-76f9a10547f8"
-                      alt=""
+                      alt="Pen icon"
                     />
                     Edit Cover Image
                   </>
@@ -186,7 +186,7 @@ function Form({ isEdit, defaultValues }) {
           )}
           {postCover && (
             <div className="mt-5">
-              <img src={postCover} alt="" className="w-full" />
+              <img src={postCover} alt="Post cover image" className="w-full" />
             </div>
           )}
           {/* Image Upload*/}
@@ -215,7 +215,7 @@ function Form({ isEdit, defaultValues }) {
             >
               <img
                 src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fcopy.svg?alt=media&token=c5904ef5-d83e-45e4-8495-1eb1e2355a76"
-                alt=""
+                alt="Copy icon"
               />
             </button>
             <span

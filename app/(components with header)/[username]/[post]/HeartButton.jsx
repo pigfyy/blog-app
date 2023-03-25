@@ -51,7 +51,7 @@ export default function HeartButton({ params }) {
       <button className="my-auto" onClick={handleClick}>
         <img
           src={isHearted ? heartLinks.filled : heartLinks.unfilled}
-          alt=""
+          alt={isHearted ? "Filled heart" : "Unfilled heart"}
           className="w-6"
         />
       </button>
