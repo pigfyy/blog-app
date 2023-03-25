@@ -49,11 +49,13 @@ export default function Header() {
                 Write Post
               </button>
             </Link>
-            <Link
-              href={`/${kebabCase(username)}`}
-              className="h-10 w-10 overflow-hidden rounded-full"
-            >
-              <img src={userPfp} alt="" referrerPolicy="no-referrer" />
+            <Link href={`/${kebabCase(username)}`}>
+              <img
+                src={userPfp}
+                alt=""
+                referrerPolicy="no-referrer"
+                className="h-10 w-10 overflow-hidden rounded-full object-cover"
+              />
             </Link>
           </>
         )}

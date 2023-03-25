@@ -30,8 +30,12 @@ export default async function PostPage({ params }) {
       <div className="w-full max-w-[900px] rounded-lg px-10 py-10 shadow-2xl">
         <div className="flex justify-between">
           <div className="flex gap-4">
-            <div className="h-12 w-12 overflow-hidden rounded-full">
-              <img src={post.authorPfp} alt="" />
+            <div className="overflow-hidden rounded-full">
+              <img
+                src={post.authorPfp}
+                alt=""
+                className="h-12 w-12 object-cover"
+              />
             </div>
             <div>
               <Link href={`/${post.authorUsername}`}>

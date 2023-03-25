@@ -9,18 +9,17 @@ import {
 export default async function Profile({ params }) {
   const username = params.username;
   const userId = await getUserIdFromUsername(username);
-  if (!userId) throw new Error("User not found");
   const userData = await getUserProfileData(userId);
   const heartCount = await getUserHeartCount(params.username);
 
   return (
     <div>
       <div className="mb-5 flex justify-center gap-12">
-        <div className="">
+        <div>
           <img
             src={userData.pfp}
             alt=""
-            className="w-[150px] max-w-[150px] rounded-full"
+            className="h-[150px] max-h-[150px] w-[150px] max-w-[150px] rounded-full object-cover"
             referrerPolicy="no-referrer"
           />
         </div>
