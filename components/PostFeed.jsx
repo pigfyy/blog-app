@@ -26,20 +26,25 @@ export default function PostFeed({ params }) {
 
   // get posts on mount
   useEffect(() => {
-    if (!userId) return;
     getLastPost(params.username).then((lastPost) => {
       setLastPost(lastPost);
       getPosts(params.username).then((ret) => {
         setStates(ret, lastPost);
       });
     });
-  }, [userId]);
+  }, []);
 
   // load more posts on click
   const loadPosts = () => {
     getMorePosts(lastVisible, params.username).then((ret) => {
       setStates(ret, lastPost);
     });
+  };
+
+  // utility function to remove post from post state
+  const removePostFromFeed = (id) => {
+    let newPosts = posts.filter((post) => post.id !== id);
+    setPosts(newPosts);
   };
 
   // create post feed using posts state
@@ -55,6 +60,7 @@ export default function PostFeed({ params }) {
           slug={post.slug}
           preview={post.postDescription}
           isAdmin={post.authorUsername === userUsername ? true : false}
+          removePostFromFeed={removePostFromFeed}
           key={uuid()}
         />
       );

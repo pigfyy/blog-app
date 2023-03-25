@@ -1,12 +1,17 @@
 import PostFeed from "@/components/PostFeed";
 import LinkToEdit from "@/components/LinkToEdit";
-import { getUserProfileData, getUserIdFromUsername } from "@/lib/firestore";
+import {
+  getUserProfileData,
+  getUserIdFromUsername,
+  getUserHeartCount,
+} from "@/lib/firestore";
 
 export default async function Profile({ params }) {
   const username = params.username;
   const userId = await getUserIdFromUsername(username);
   if (!userId) throw new Error("User not found");
   const userData = await getUserProfileData(userId);
+  const heartCount = await getUserHeartCount(params.username);
 
   return (
     <div>
@@ -29,10 +34,12 @@ export default async function Profile({ params }) {
           </div>
           <div className="flex items-center gap-5">
             <span>
-              <span className="font-bold">{userData.postCount}</span> posts
+              <span className="font-bold">{userData.postCount}</span>{" "}
+              {userData.postCount === 1 ? "post" : "posts"}
             </span>
             <span>
-              <span className="font-bold">{userData.heartCount}</span> likes
+              <span className="font-bold">{heartCount}</span>{" "}
+              {heartCount === 1 ? "heart" : "hearts"}
             </span>
           </div>
           <div>

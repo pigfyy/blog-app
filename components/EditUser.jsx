@@ -7,7 +7,7 @@ import { uploadProfileImg } from "@/lib/storage";
 import { checkUsernameExists, createUser } from "@/lib/firestore";
 
 export default function EditUser({ user }) {
-  const [pfp, setPfp] = useState(user.photoURL);
+  const [pfp, setPfp] = useState(user.photoURL || user.pfp);
 
   // react hook forms for form validation
   const {
@@ -49,6 +49,7 @@ export default function EditUser({ user }) {
                   src={pfp || user.photoURL}
                   alt=""
                   className="h-64 w-64 overflow-hidden rounded-full"
+                  referrerPolicy="no-referrer"
                 />
               </button>
               <div className="absolute top-1/2 left-1/2 hidden translate-x-[-50%] translate-y-[-50%] select-none text-center font-extrabold text-white group-hover:block group-hover:brightness-[150%]">
@@ -56,10 +57,6 @@ export default function EditUser({ user }) {
                 <br />
                 Avatar
               </div>
-              <input
-                type="file"
-                className="absolute top-0 left-0 z-50 h-full w-full cursor-pointer rounded-full bg-blue-900 pl-32 opacity-0"
-              ></input>
               <input
                 type="file"
                 className="absolute top-0 left-0 z-50 h-full w-full cursor-pointer rounded-full pl-32 opacity-0"
@@ -83,6 +80,7 @@ export default function EditUser({ user }) {
                 className="rounded-lg border-[1px] border-neutral-400 p-2 outline-none"
                 placeholder="Enter your full name..."
                 maxLength={30}
+                defaultValue={user.name || ""}
                 {...register("name", {
                   required: "Name is required",
                   minLength: {
@@ -121,6 +119,7 @@ export default function EditUser({ user }) {
                 className="rounded-lg border-[1px] border-neutral-400 p-2 outline-none"
                 placeholder="Create a username..."
                 maxLength={20}
+                defaultValue={user.username || ""}
                 {...register("username", {
                   required: "Username is required",
                   minLength: {
@@ -161,6 +160,7 @@ export default function EditUser({ user }) {
                 className="resize-none rounded-lg border-[1px] border-neutral-400 p-2 outline-none"
                 placeholder="(Tell us about yourself...)"
                 maxLength={150}
+                defaultValue={user.bio || ""}
                 {...register("bio", { maxLength: 150 })}
               ></textarea>
             </div>

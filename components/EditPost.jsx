@@ -3,7 +3,11 @@
 import { usePathname } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
-import { uploadCoverImg, uploadPostImg } from "@/lib/storage";
+import {
+  uploadTempCoverImg,
+  uploadCoverImg,
+  uploadPostImg,
+} from "@/lib/storage";
 import { setPost, checkSlugExists } from "@/lib/firestore";
 import kebabCase from "lodash.kebabcase";
 import { v4 as uuid } from "uuid";
@@ -20,6 +24,7 @@ function Form({ isEdit, defaultValues }) {
     handleSubmit,
     control,
     watch,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -30,24 +35,34 @@ function Form({ isEdit, defaultValues }) {
   }, []);
 
   // handles form submit
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const postData = {
       postTitle: data.postTitle,
       postDescription: data.postDescription,
       postContent: data.postContent,
-      postCover: postCover,
+      postCover: await uploadCoverImg(data.postCover, postId),
     };
 
     setPost(postData, postId, defaultValues);
   };
 
-  // handles cover image upload
+  // discards changes
+  const discardChanges = () => {
+    setPostCover(defaultValues?.postCover);
+
+    setValue("postTitle", defaultValues?.postTitle);
+    setValue("postDescription", defaultValues?.postDescription);
+    setValue("postContent", defaultValues?.postContent);
+    setValue("postCover", defaultValues?.postCover);
+  };
+
+  // handles cover and post image upload
   const uploadImg = async (e, imgType) => {
     const file = e.target.files[0];
     if (!file) return;
     if (imgType === "postCover") {
-      const url = await uploadCoverImg(file, postId);
-      setPostCover(url);
+      const coverUrl = await uploadTempCoverImg(file, postId);
+      setPostCover(coverUrl);
     } else if (imgType === "postImg") {
       const url = await uploadPostImg(file, postId);
       setPostImg(url);
@@ -253,8 +268,12 @@ function Form({ isEdit, defaultValues }) {
         >
           Publish
         </button>
-        <button className="rounded-lg px-6 py-3 text-base font-medium text-blue-600 hover:bg-blue-200 hover:text-blue-900">
-          Save draft
+        <button
+          className="rounded-lg px-6 py-3 text-base font-medium text-red-600 hover:bg-red-200 hover:text-red-900"
+          onClick={discardChanges}
+          type="button"
+        >
+          Discard Changes
         </button>
       </div>
     </form>

@@ -1,6 +1,7 @@
 import { getHeartCount } from "@/lib/firestore";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { deletePost, getPostId } from "@/lib/firestore";
 
 export default function FeedContent({
   img,
@@ -10,6 +11,7 @@ export default function FeedContent({
   slug,
   preview,
   isAdmin,
+  removePostFromFeed,
 }) {
   const [heartCount, setHeartCount] = useState(0);
 
@@ -18,6 +20,12 @@ export default function FeedContent({
       setHeartCount(count);
     });
   }, []);
+
+  const handleDeletePost = async () => {
+    const postId = await getPostId(authorUsername, slug);
+    deletePost(authorUsername, slug, postId);
+    removePostFromFeed(postId);
+  };
 
   return (
     <div className="flex w-[374px] flex-col overflow-hidden rounded-lg border-[1px] border-neutral-200">
@@ -59,7 +67,10 @@ export default function FeedContent({
                   />
                 </button>
               </Link>
-              <button className="rounded-lg border-[1px] border-red-600 p-3 text-base font-medium leading-4 text-red-600">
+              <button
+                className="rounded-lg border-[1px] border-red-600 p-3 text-base font-medium leading-4 text-red-600"
+                onClick={handleDeletePost}
+              >
                 <img
                   src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fdelete.svg?alt=media&token=c902693d-5254-4fda-9718-278837036145"
                   alt=""

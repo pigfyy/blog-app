@@ -18,7 +18,7 @@ export default function UserState({ children }) {
     if (user) {
       setUserId(user.uid);
       getUserData(user.uid).then((userData) => {
-        setUserUsername(userData.username);
+        setUserUsername(userData?.username);
       });
     }
   }, [user]);
