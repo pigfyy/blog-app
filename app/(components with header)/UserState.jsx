@@ -17,9 +17,13 @@ export default function UserState({ children }) {
   useEffect(() => {
     if (user) {
       setUserId(user.uid);
-      getUserData(user.uid).then((userData) => {
-        setUserUsername(userData?.username);
-      });
+      getUserData(user.uid)
+        .then((userData) => {
+          setUserUsername(userData?.username);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [user]);
 
