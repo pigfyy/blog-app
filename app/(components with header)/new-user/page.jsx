@@ -22,7 +22,7 @@ export default function NewUserPage() {
   return (
     <>
       {user && (
-        <div className="mx-auto my-auto flex flex-col gap-3 pb-16">
+        <div className="mx-auto my-auto flex w-11/12 max-w-[676px] flex-col gap-3 pb-16">
           <h1 className="text-center text-4xl font-extrabold">Welcome!</h1>
           <p className="text-center text-lg">
             We need some information about you to get you started

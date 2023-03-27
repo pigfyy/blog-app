@@ -26,15 +26,15 @@ export default async function PostPage({ params }) {
   );
 
   return (
-    <div className="flex justify-center">
-      <div className="w-full max-w-[900px] rounded-lg px-10 py-10 shadow-2xl">
+    <div className="flex w-full justify-center">
+      <div className="w-full max-w-[900px] rounded-lg px-3 py-10 shadow-2xl min-[585px]:px-10">
         <div className="flex justify-between">
           <div className="flex gap-4">
-            <div className="overflow-hidden rounded-full">
+            <div>
               <img
                 src={post.authorPfp}
                 alt={`${post.authorUsername}'s profile picture`}
-                className="h-12 w-12 object-cover"
+                className="h-12 w-12 overflow-hidden rounded-full object-cover"
               />
             </div>
             <div>

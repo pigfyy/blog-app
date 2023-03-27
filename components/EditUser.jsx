@@ -41,9 +41,9 @@ export default function EditUser({ user }) {
     <>
       {user && (
         <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex gap-10 rounded-xl p-5 shadow-2xl">
+          <div className="flex gap-10 rounded-xl p-5 shadow-2xl max-[823px]:flex-col">
             {/* Profile Picture */}
-            <div className="group relative my-auto flex overflow-hidden rounded-full">
+            <div className="group relative my-auto mx-auto flex overflow-hidden rounded-full">
               <button className="overflow-hidden rounded-full group-hover:brightness-75">
                 <img
                   src={pfp || user.photoURL}

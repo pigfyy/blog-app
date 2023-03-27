@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import kebabCase from "lodash.kebabcase";
 import { useState, useEffect } from "react";
 
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -40,17 +39,32 @@ export default function Header() {
           {user && (
             <>
               <button
-                className="rounded-lg border-[1px] border-red-600 px-6 py-3 text-base font-medium text-black hover:shadow-md"
+                className="h-full rounded-lg border-[1px] border-red-600 px-3 py-3 hover:shadow-md min-[585px]:px-6"
                 onClick={() => logout()}
               >
-                Log Out
+                <img
+                  src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Flogout.svg?alt=media&token=a9dd94b4-dd5e-4959-a559-45dbc6a08999"
+                  alt="Logout"
+                  className="h-[21px] min-[585px]:hidden"
+                />
+                <p className="hidden text-base font-medium text-black min-[585px]:block">
+                  Logout
+                </p>
               </button>
-              <Link href="/new">
-                <button className="rounded-lg border-[1px] border-blue-600 px-6 py-3 text-base font-medium text-black hover:shadow-md">
+              <Link
+                href="/new"
+                className="rounded-lg border-[1px] border-blue-600 px-3 py-3 hover:shadow-md min-[585px]:px-6"
+              >
+                <img
+                  src="https://firebasestorage.googleapis.com/v0/b/blog-c2483.appspot.com/o/icons%2Fedit.svg?alt=media&token=6d372210-3e2a-43ad-8b7e-76f9a10547f8"
+                  alt="Write post"
+                  className="h-[21px] min-[585px]:hidden"
+                />
+                <p className="hidden text-base font-medium text-black min-[585px]:block">
                   Write Post
-                </button>
+                </p>
               </Link>
-              <Link href={`/${kebabCase(username)}`}>
+              <Link href={`/${username}`}>
                 <img
                   src={userPfp}
                   alt={`${username}'s profile picture`}

@@ -28,28 +28,30 @@ export default function FeedContent({
   };
 
   return (
-    <div className="flex w-[374px] flex-col overflow-hidden rounded-lg border-[1px] border-neutral-200">
+    <div className="flex w-[374px] flex-col overflow-hidden rounded-lg border-[1px] border-neutral-200 max-[400px]:mx-auto max-[400px]:w-11/12">
       <img
         src={img}
         alt="Post cover"
         referrerPolicy="no-referrer"
         className="h-[160px] object-cover"
       />
-      <div className="flex flex-col px-6 py-10">
-        <Link href={`/${authorUsername}`}>
-          <span className="text-xs font-bold leading-8 text-neutral-600 hover:cursor-pointer hover:underline">
-            {author}
-          </span>
-        </Link>
-        <Link href={`/${authorUsername}/${slug}`}>
-          <p className="mb-2 text-xl font-bold leading-6 text-neutral-900 hover:text-blue-700">
-            {title}
+      <div className="flex flex-1 flex-col px-6 py-10">
+        <div className="flex flex-col">
+          <Link href={`/${authorUsername}`}>
+            <span className="text-xs font-bold leading-8 text-neutral-600 hover:cursor-pointer hover:underline">
+              {author}
+            </span>
+          </Link>
+          <Link href={`/${authorUsername}/${slug}`}>
+            <p className="mb-2 text-xl font-bold leading-6 text-neutral-900 hover:text-blue-700">
+              {title}
+            </p>
+          </Link>
+          <p className="text-base font-normal leading-6  text-neutral-600">
+            {preview}
           </p>
-        </Link>
-        <p className="text-base font-normal leading-6  text-neutral-600">
-          {preview}
-        </p>
-        <div className="mt-8 flex justify-between">
+        </div>
+        <div className="mt-auto flex justify-between pt-8">
           {!isAdmin && (
             <Link href={`/${authorUsername}/${slug}`}>
               <button className="rounded-lg border-[1px] border-blue-600 px-6 py-[14px] text-base font-medium leading-4 text-blue-600">

@@ -40,7 +40,10 @@ function Form({ isEdit, defaultValues }) {
       postTitle: data.postTitle,
       postDescription: data.postDescription,
       postContent: data.postContent,
-      postCover: await uploadCoverImg(data.postCover, postId),
+      postCover:
+        defaultValues.postCover === data.postCover
+          ? defaultValues.postCover
+          : await uploadCoverImg(data.postCover, postId),
     };
 
     setPost(postData, postId, defaultValues);
@@ -80,12 +83,12 @@ function Form({ isEdit, defaultValues }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {isEdit && (
-        <div className="mt-3 flex flex-col rounded-lg px-10 py-10 shadow-2xl">
+        <div className="mt-3 flex flex-col rounded-lg px-3 py-10 shadow-2xl min-[585px]:px-10">
           {/* Title */}
           <input
             type="text"
             placeholder="New post title here..."
-            className="text-5xl font-extrabold outline-none"
+            className="text-3xl font-extrabold outline-none min-[585px]:text-5xl"
             maxLength={60}
             defaultValue={defaultValues?.postTitle || ""}
             {...register("postTitle", {
@@ -261,7 +264,7 @@ function Form({ isEdit, defaultValues }) {
           <ViewPost post={post} />
         </div>
       )}
-      <div className="mt-5 flex gap-2">
+      <div className="mt-5 flex gap-2 px-3 min-[585px]:px-0">
         <button
           className="rounded-lg bg-blue-600 px-6 py-3 text-base font-medium text-white hover:brightness-90"
           type="submit"
@@ -273,7 +276,7 @@ function Form({ isEdit, defaultValues }) {
           onClick={discardChanges}
           type="button"
         >
-          Discard Changes
+          Revert
         </button>
       </div>
     </form>
@@ -288,7 +291,7 @@ export default function EditPost({ defaultValues }) {
   return (
     <div className="flex justify-center">
       <div className="w-full max-w-[900px]">
-        <div className="flex w-full justify-between">
+        <div className="flex w-full justify-between px-3">
           <span className="font-bold underline">
             {pathname === "/new" ? "Create Post" : "Edit Post"}
           </span>
