@@ -5,11 +5,13 @@ import { v4 as uuid } from "uuid";
 import { getPosts, getMorePosts, getLastPost } from "@/lib/firestore";
 import { useState, useEffect } from "react";
 import { useAppStore } from "@/lib/store";
+import { HashLoader } from "react-spinners";
 
 export default function PostFeed({ params }) {
   const [posts, setPosts] = useState([]);
   const [lastVisible, setLastVisible] = useState(null);
   const [lastPost, setLastPost] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   let { userUsername, userId } = useAppStore();
 
@@ -22,6 +24,7 @@ export default function PostFeed({ params }) {
     } else {
       setLastVisible(ret.lastVisible);
     }
+    setLoading(false);
   };
 
   // get posts on mount
@@ -36,6 +39,7 @@ export default function PostFeed({ params }) {
 
   // load more posts on click
   const loadPosts = () => {
+    setLoading(true);
     getMorePosts(lastVisible, params.username).then((ret) => {
       setStates(ret, lastPost);
     });
@@ -74,7 +78,11 @@ export default function PostFeed({ params }) {
       <div className="mx-auto grid grid-cols-4 gap-12 max-[1874px]:grid-cols-3 max-[1444px]:grid-cols-2 max-[1024px]:grid-cols-1">
         {createFeed()}
       </div>
-      {lastVisible ? (
+      {loading ? (
+        <div className="mx-auto mt-5 mb-3">
+          <HashLoader color="#2563EB" size={45} />
+        </div>
+      ) : lastVisible ? (
         <button
           className="mx-auto mt-5 mb-3 rounded-lg border-[1px] border-blue-600 px-6 py-3 text-base font-medium text-black hover:shadow-md"
           onClick={loadPosts}

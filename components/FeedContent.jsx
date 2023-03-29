@@ -28,7 +28,7 @@ export default function FeedContent({
   };
 
   return (
-    <div className="flex w-[374px] flex-col overflow-hidden rounded-lg border-[1px] border-neutral-200 max-[400px]:mx-auto max-[400px]:w-11/12">
+    <div className="flex w-[359px] flex-col overflow-hidden rounded-lg border-[1px] border-neutral-200 max-[400px]:mx-auto max-[400px]:w-11/12">
       <img
         src={img}
         alt="Post cover"

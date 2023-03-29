@@ -41,7 +41,7 @@ function Form({ isEdit, defaultValues }) {
       postDescription: data.postDescription,
       postContent: data.postContent,
       postCover:
-        defaultValues.postCover === data.postCover
+        defaultValues?.postCover === data.postCover
           ? defaultValues.postCover
           : await uploadCoverImg(data.postCover, postId),
     };
