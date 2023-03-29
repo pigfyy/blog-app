@@ -8,6 +8,10 @@ export default function Head() {
         content="Discover the latest news and insights on our blog app. From tech trends to lifestyle tips, we’ve got you covered. Join our community today!"
       />
       <link rel="icon" href="/favicon.ico" />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter&display=swap"
+        rel="stylesheet"
+      />
     </>
   );
 }
